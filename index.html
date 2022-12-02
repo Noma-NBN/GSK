@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bản đồ tiêm ngừa</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/handlebars/4.7.7/handlebars.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <script src="scripts.js"></script>
+    <script>
+      const CONFIGURATION = {
+        "locations": [
+          {"title":"VNVC Bình Chánh","address1":"Tầng 2","address2":"Cao ốc chung cư Saigon Mia, Số 9A chung cư cụm III,IV, Đường số 9A, Khu dân cư Trung Sơn, Bình Chánh, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.73309962941309,"lng":106.68921058834322},"placeId":"ChIJIUNn1U0vdTER1icXole5-14"},
+          {"title":"Vinmec International Hospital","address1":"458 P. Minh Khai","address2":"Khu đô thị Times City, Hai Bà Trưng, Hà Nội, Vietnam","coords":{"lat":20.996215747776546,"lng":105.86691372944773},"placeId":"ChIJd7js2gSsNTERTMtPtgIeHu8"},
+          {"title":"VNVC Hoang Van Thu - Vietnam Vaccination","address1":"198 Hoàng Văn Thụ","address2":"Phường 9, Phú Nhuận, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.800248746685952,"lng":106.67264783558197},"placeId":"ChIJYYoN8ygpdTERuXqQEaCRStw"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"Số 8 Đ.Trung Mỹ Tây 2A","address2":"Khu phố 5, Quận 12, Thành phố Hồ Chí Minh 71507, Vietnam","coords":{"lat":10.847953719973674,"lng":106.61404846441805},"placeId":"ChIJA1yNBIQrdTERHHpOScUvlHs"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"Lầu 2","address2":"Toà nhà TTTM Co.opmart, 304A Quang Trung, Phường 11, Gò Vấp, Thành phố Hồ Chí Minh 71421, Vietnam","coords":{"lat":10.834913699281906,"lng":106.66219837055226},"placeId":"ChIJEeu96k4pdTERoERmjsEjBsc"},
+          {"title":"VNVC Mỹ Tho","address1":"số 290","address2":"292 Đ. Hùng Vương, Đạo Thành, Thành phố Mỹ Tho, Tiền Giang, Vietnam","coords":{"lat":10.372710044469976,"lng":106.36552952209014},"placeId":"ChIJk2DkRwWxCjER-20TCCa1dug"},
+          {"title":"VNVC MỸ THO 2","address1":"545 Lê Văn Phẩm","address2":"Phường 5, TP, Tiền Giang, Vietnam","coords":{"lat":10.358772360472447,"lng":106.34087997055228},"placeId":"ChIJP9l64EWlCjERzJSQLdRASMM"},
+          {"title":"VNVC Cai Lậy","address1":"414 QL1A","address2":"TT. Cai Lậy, Cai Lậy, Tiền Giang, Vietnam","coords":{"lat":10.40469311431389,"lng":106.12799799325408},"placeId":"ChIJM8KoBUuXCjERJzh_S_Qchis"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"Tầng 1","address2":"Trung tâm thương mại Go!, Võ Nguyên Giáp, Ấp 1, Bến Tre, 86113, Vietnam","coords":{"lat":10.25413548675041,"lng":106.36069535648345},"placeId":"ChIJjXs74x6pCjERRXaXvzEQd0A"},
+          {"title":"VNVC Đồng Nai","address1":"22 Đoàn Văn Cự","address2":"Tam Hiệp, Thành phố Biên Hòa, Đồng Nai, Vietnam","coords":{"lat":10.947035807841525,"lng":106.85750436441803},"placeId":"ChIJR0Hoav_ddDER8Gd7OEeJ6Hw"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"Tầng trệt TTTM Big C Đồng Nai","address2":"833 XL Hà Nội, khu phố 1 p, Tp. Biên Hòa, Đồng Nai 76171, Vietnam","coords":{"lat":10.905610493426497,"lng":106.85043447055224},"placeId":"ChIJz0G0pQTfdDERDj98A4uU4lQ"},
+          {"title":"VNVC Da Nang Vaccination Center","address1":"Lô 02-A4.3","address2":"Lô 03-A4.3 - Khu đất công viên Bắc Tượng Đài P, Hòa Cường, Hải Châu, Đà Nẵng 50217, Vietnam","coords":{"lat":16.048704633486953,"lng":108.22537856441802},"placeId":"ChIJVf3oKJkZQjER1hjAqqhZNFw"},
+          {"title":"VNVC Huế","address1":"56 Đ. Ngô Quyền","address2":"Vĩnh Ninh, Thành phố Huế, Thừa Thiên Huế 52000, Vietnam","coords":{"lat":16.463046057402245,"lng":107.590251082209},"placeId":"ChIJUZXYnzqhQTER48CzBk00b8Y"},
+          {"title":"VNVC Quảng Ngãi","address1":"120 Đinh Tiên Hoàng","address2":"Nghĩa Chánh Nam, Quảng Ngãi, 53000, Vietnam","coords":{"lat":15.114413720440693,"lng":108.81656123558197},"placeId":"ChIJE_3gazlTaDER_Bzqb3Mo1kk"},
+          {"title":"VNVC Châu Ổ","address1":"496 Phạm Văn Đồng","address2":"Bình Long, Bình Sơn, Quảng Ngãi, Vietnam","coords":{"lat":15.300413729892155,"lng":108.75812047055227},"placeId":"ChIJVYbdM1q1aTERhGzBMAv-6IM"},
+          {"title":"VNVC Đức Phổ","address1":"294 Nguyễn Nghiêm","address2":"TDP 5, Đức Phổ, Quảng Ngãi 54306, Vietnam","coords":{"lat":14.817306786030736,"lng":108.9532897932541},"placeId":"ChIJfdgJAEb7aDER-4bPsvErbq0"},
+          {"title":"VNVC Tam Kỳ","address1":"số 1 Trần Quý Cáp","address2":"Phường Tân Thạnh, Tam Kỳ, Quảng Nam 51100, Vietnam","coords":{"lat":15.579914191451671,"lng":108.47316362209015},"placeId":"ChIJi0F5wVPdaTER7mLgiAAT01I"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"Quốc lộ 1D","address2":"Tổ 1, Khu vực 8, Thành phố Qui Nhơn, Bình Định 55118, Vietnam","coords":{"lat":13.782324868684086,"lng":109.18047996441804},"placeId":"ChIJ56KWMHITbzERbJxIdhDbmDQ"},
+          {"title":"VNVC Hoài Nhơn","address1":"95 Trần Hưng Đạo","address2":"TT. Bồng Sơn, Hoài Nhơn, Bình Định 55406, Vietnam","coords":{"lat":14.432052628342777,"lng":109.01392230674591},"placeId":"ChIJq-hVlLPFaDERl8FjxckzBss"},
+          {"title":"VNVC An Nhơn","address1":"330 Trường Chinh","address2":"khu vực An Ngãi, An Nhơn, Bình Định 55257, Vietnam","coords":{"lat":13.897843805533151,"lng":109.10893453558195},"placeId":"ChIJEd0Mtlc_bzER-3XraCRa3KM"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"STH 22.22 Đường số 4 Phường Phước Hải","address2":"Khu đô thị mới Lê Hồng Phong, II, Khu đô thị Hà Quang 2, Nha Trang, Khánh Hòa 650000, Vietnam","coords":{"lat":12.246875467615133,"lng":109.17626333558194},"placeId":"ChIJvcVDjwddcDERsC7spqkHFek"},
+          {"title":"VNVC Buôn Ma Thuột","address1":"7 Đ. Chu Văn An","address2":"Tân An, Thành phố Buôn Ma Thuột, Đắk Lắk, Vietnam","coords":{"lat":12.694212870926595,"lng":108.0630057932541},"placeId":"ChIJN2IbOPb3cTEROZO8ZqP9Noo"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"Tầng 1 (tầng trệt","address2":"Trung tâm mua sắm Hiếu Hằng, số 58A Nguyễn Hữu Cảnh, Hải Đình, Đồng Hới, Quảng Bình 47100, Vietnam","coords":{"lat":17.46300333394058,"lng":106.62100860674593},"placeId":"ChIJMTKYFKtXRzERQnH7lXunF7I"},
+          {"title":"VNVC Truong Chinh","address1":"180 Đ. Trường Chinh","address2":"Khương Thượng, Đống Đa, Hà Nội 100000, Vietnam","coords":{"lat":21.00022413648839,"lng":105.83205333558199},"placeId":"ChIJpetYWoesNTERsureaqVte0Q"},
+          {"title":"VNVC ICON 4 Cau Giay","address1":"Số 3 Đ. Cầu Giấy","address2":"Ngọc Khánh, Đống Đa, Hà Nội 100000, Vietnam","coords":{"lat":21.027991312675415,"lng":105.80442042944775},"placeId":"ChIJ1w82pDmrNTERj8ldjV9dUW8"},
+          {"title":"VNVC Nguyễn Thái Học","address1":"Tầng B1 Tòa nhà DOJI TOWER","address2":"Nguyễn Thái Học (đối diện số nhà 29C, Cửa Nam, Ba Đình, Hà Nội, Vietnam","coords":{"lat":21.028861219536836,"lng":105.84211183497027},"placeId":"ChIJ4Q0XBN2rNTER5j3yjynSIbo"},
+          {"title":"Trung tâm tiêm chủng vắc xin Xuân Mai","address1":"Số 11","address2":"Tổ 1, Xuân Hà, TT. Xuân Mai, Chương Mỹ, Hà Nội 13417, Vietnam","coords":{"lat":20.903125708966147,"lng":105.58395061165676},"placeId":"ChIJK7WpGf9FNDERI9uUmtPb23c"},
+          {"title":"VNVC Hải Phòng","address1":"Số 11- Lô 30A Đường","address2":"Lê Hồng Phong, Đông Khê, Ngô Quyền, Hải Phòng 18000, Vietnam","coords":{"lat":20.85866545321067,"lng":106.69745090674589},"placeId":"ChIJQQi5zA57SjERLcTgegFBJWM"},
+          {"title":"VNVC Hạ Long","address1":"Tầng 1","address2":"của tòa nhà Chung, cư Lideco, Thành phố Hạ Long, Quảng Ninh, Vietnam","coords":{"lat":20.955458009116523,"lng":107.08515361165676},"placeId":"ChIJY0I9HMJZSjERh8PJAwdMoy4"},
+          {"title":"VNVC Vĩnh Yên - Vĩnh Phúc","address1":"777 Nguyễn Tất Thành","address2":"Tích Sơn, Vĩnh Yên, Vĩnh Phúc 15106, Vietnam","coords":{"lat":21.309558827051013,"lng":105.583597164418},"placeId":"ChIJ9RudyOHxNDERUo0zYymiko0"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"458 Nguyễn Văn Cừ","address2":"P, Bắc Ninh, 16118, Vietnam","coords":{"lat":21.16664321891487,"lng":106.04481626441805},"placeId":"ChIJQZgp83QJNTERGy6dSHUm_jg"},
+          {"title":"VNVC Bắc Giang","address1":"Tòa nhà Hapro","address2":"Quảng trường 3/2, P, Phường Hoàng Văn Thụ, Bắc Giang, 26119, Vietnam","coords":{"lat":21.27897650260856,"lng":106.20224903558199},"placeId":"ChIJO3VC1tNtNTERsFaW464hCmg"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"số 601 Nguyễn Văn Linh","address2":"P. Hiền Nam, Hưng Yên, Vietnam","coords":{"lat":20.67018121495497,"lng":106.05909666441804},"placeId":"ChIJ8f3311rHNTERilQPl4YOsl0"},
+          {"title":"VNVC Bình Tân","address1":"175 Đ. Vành Đai Trong","address2":"An Lạc A, Bình Tân, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.746847584146215,"lng":106.6149266779272},"placeId":"ChIJ44hK3j0tdTER-b9PULE2FA8"},
+          {"title":"VNVC CANTAVIL AN PHÚ","address1":"1 Song Hành","address2":"An Phú, Quận 2, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.801454323178413,"lng":106.74678167055224},"placeId":"ChIJUW_YMTEndTERhsMNMW6Cd9s"},
+          {"title":"VNVC Quận 7","address1":"Tòa nhà Broadway D","address2":"Khu Đô Thị Phú Mỹ Hưng số, 152 Nguyễn Lương Bằng, Tân Phú, Quận 7, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.728711711907689,"lng":106.72151696932889},"placeId":"ChIJKZ7UHLUvdTERn46dJyMSqik"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"576 Đ. 30 Tháng 4","address2":"Hưng Lợi, Ninh Kiều, Cần Thơ, Vietnam","coords":{"lat":10.015969263479786,"lng":105.76404292944775},"placeId":"ChIJe10ro66JoDER8eTtIMKMem4"},
+          {"title":"VNVC VĨNH LONG - CÔNG TY CỔ PHẦN VACXIN VIỆT NAM - CHI NHÁNH TP HỒ CHÍ MINH","address1":"170","address2":"2 Đ. Phạm Hùng, Phường 9, Vĩnh Long, 85000, Vietnam","coords":{"lat":10.258785689563673,"lng":105.95227494113924},"placeId":"ChIJ5zIE2VCDCjER39Gu4dxA-JM"},
+          {"title":"VNVC Cà Mau","address1":"138 Ngô Quyền","address2":"Phường 9, Thành phố Cà Mau, Cà Mau 98106, Vietnam","coords":{"lat":9.183208839653664,"lng":105.14137856441803},"placeId":"ChIJx-eLgS9JoTERv5e4Q2zXAjE"},
+          {"title":"VNVC Binh Phuoc","address1":"Số 1109 đường","address2":"Phú Riềng Đỏ, Phường Tân Thiện, Thành phố, Bình Phước 67110, Vietnam","coords":{"lat":11.535937984080956,"lng":106.90122546441802},"placeId":"ChIJMajNTrShdDER9FzYyyhnqKY"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"242 QL20","address2":"Liên Nghĩa, Đức Trọng, Lâm Đồng 66806, Vietnam","coords":{"lat":11.74500742805697,"lng":108.37560786441803},"placeId":"ChIJdbiNuGFBcTERF32ZICQmkxw"},
+          {"title":"VNVC Bao Loc Vaccination Center","address1":"Siêu thị sài gòn Co.op","address2":"Tháp Nước, Trần Phú, Phường 2, Bảo Lộc, Lâm Đồng 66458, Vietnam","coords":{"lat":11.543806872160527,"lng":107.80275498834324},"placeId":"ChIJA1THNbb3czERuA4AOfNlBbA"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"Tầng 3","address2":"Co.op Mart, 01 Ngô Thì Nhậm, Phường 1, Cao Lãnh, Đồng Tháp 81106, Vietnam","coords":{"lat":10.459574519901604,"lng":105.64067302944775},"placeId":"ChIJ-7uEoCllCjERczjyIGsouY0"},
+          {"title":"Trung tâm tiêm chủng và dinh dưỡng The Sun Care","address1":"Toà CT2A","address2":"Khu đô thị mới, QL32, Tân Tây Đô, Đan Phượng, Hà Nội 110000, Vietnam","coords":{"lat":21.073480868350593,"lng":105.70205796441805},"placeId":"ChIJARAjGpJVNDERVG1dl-6tXps"},
+          {"title":"Trung Tâm Tiêm Chủng Vắc Xin Hà Nội","address1":"2PX3+PHH","address2":"Đường 422, Kim Chung, Hoài Đức, Hà Nội, Vietnam","coords":{"lat":21.049318030242574,"lng":105.70398282944774},"placeId":"ChIJYx0jbDxUNDER7Pk5Tt0b-w0"},
+          {"title":"Chung cư Thăng Long Victory","address1":"Chung cư Thăng Long Victory","address2":"ĐCT08, An Phú, Hoài Đức, Hà Nội, Vietnam","coords":{"lat":21.009181830198877,"lng":105.72219151165677},"placeId":"ChIJhXHSuI9TNDER70LVpw0nys4"},
+          {"title":"Trung Tâm Tiêm Chủng Vắc Xin TAVO-Quốc Oai","address1":"264 ĐT419","address2":"TT. Quốc Oai, Quốc Oai, Hà Nội, Vietnam","coords":{"lat":20.993609782354536,"lng":105.63725657055228},"placeId":"ChIJSaCHYm1RNDERC41j-SHjLMg"},
+          {"title":"Trung tâm tiêm chủng vắc xin Xuân Mai","address1":"Số 11","address2":"Tổ 1, Xuân Hà, TT. Xuân Mai, Chương Mỹ, Hà Nội 13417, Vietnam","coords":{"lat":20.90312484763884,"lng":105.58395061165676},"placeId":"ChIJK7WpGf9FNDERI9uUmtPb23c"},          
+          {"title":"Trung tâm tiêm chủng vắc xin TAVO-Phú Xuyên","address1":"19-Đường 1A-Thôn Ứng Hòa","address2":"Phúc Tiến, Phú Xuyên, Hà Nội, Vietnam","coords":{"lat":20.72965622594468,"lng":105.91255047485143},"placeId":"ChIJhap4zeS3NTER1SKQUkXv1No"},
+          {"title":"Trung tâm tiêm chủng Smart City ( S205 Mặt Nội Khu)","address1":"01SH08A","address2":"toà S2.05, Vinhomes Smartcity, Nam Từ Liêm, Hà Nội 12009, Vietnam","coords":{"lat":21.006580799568347,"lng":105.73710162944775},"placeId":"ChIJW0q3LcJTNDERUJjFNYH-KgA"},
+          {"title":"CTCP Y tế Nam Từ Liêm","address1":"86 Phố Nhổn","address2":"Xuân Phương, Bắc Từ Liêm, Hà Nội, Vietnam","coords":{"lat":21.055699696437333,"lng":105.7311287006117},"placeId":"ChIJBRAr41lVNDERoXjKw3Mhn6c"},
+          {"title":"Vacco Chương Mỹ - Trung Tâm Tiêm Chủng Trẻ em và Người lớn","address1":"Đối diện cây xăng","address2":"QL6, ninh sơn, Chương Mỹ, Hà Nội 100000, Vietnam","coords":{"lat":20.924332200702413,"lng":105.70747271165676},"placeId":"ChIJTyoUxmGrNTERnE_RPAVihLM"},
+          {"title":"VACCO Ứng Hòa - Trung tâm tiêm chủng trẻ em và người lớn","address1":"54 Dốc viện","address2":"TT. Vân Đình, Ứng Hòa, Hà Nội 100000, Vietnam","coords":{"lat":20.72495289598776,"lng":105.77301061165676},"placeId":"ChIJ-UC9RWs1NDERzkdTDxkrGP4"},
+          {"title":"VACCO Thanh Oai - Trung Tâm Tiêm Chủng trẻ em và người lớn","address1":"72 P. Vác","address2":"Dân Hoà, Thanh Oai, Hà Nội 100000, Vietnam","coords":{"lat":20.81148104329957,"lng":105.77590827055228},"placeId":"ChIJ48a2R1qrNTERxX6BvCCH1jk"},
+          {"title":"Vacco Ba Vì - Trung tâm tiêm chủng trẻ em và người lớn","address1":"Khu 1","address2":"thôn Tân, Phú Mỹ, Vật Lai, Ba Vì, Hà Nội 100000, Vietnam","coords":{"lat":21.21462914231799,"lng":105.40966447055224},"placeId":"ChIJ-W4pvTmrNTERCiyCaWrUav0"},
+          {"title":"Vacco Trần Kim Xuyến - Trung Tâm Tiêm Chủng Trẻ Em và Người Lớn","address1":"11 P. Trần Kim Xuyến","address2":"Yên Hoà, Cầu Giấy, Hà Nội 100000, Vietnam","coords":{"lat":21.018400791210787,"lng":105.79483837055226},"placeId":"ChIJ2y3KdGtxNjERqwok9w-wKlM"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"Tầng 2","address2":"Cao ốc Chung cư Moonlight residences, 102 Đặng Văn Bi, Bình Thọ, Thủ Đức, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.84441695831575,"lng":106.76265222944775},"placeId":"ChIJ-aQpi94ndTERDy-OepA0mcg"},
+          {"title":"VNVC THỦ ĐỨC 2","address1":"Căn hộ Stown","address2":"2 Đ. Bình Chiểu, Bình Chiểu, Thủ Đức, Thành phố Hồ Chí Minh 71313, Vietnam","coords":{"lat":10.872944453713922,"lng":106.73289071165676},"placeId":"ChIJzw3R0SEndTERjFoPXdqJJtw"},
+          {"title":"VNVC Bình Thạnh","address1":"207C Nguyễn Xí","address2":"Phường 26, Bình Thạnh, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.81645183475155,"lng":106.70625387055227},"placeId":"ChIJBw1kzk0pdTERA2e_ojPjvhA"},
+          {"title":"VNVC Lê Đại Hành","address1":"Lầu 1","address2":"Trung tâm thương mại Flemington, Cao ốc Bảo Gia, 184 Đ. Lê Đại Hành, Phường 15, Quận 11, Thành phố Hồ Chí Minh 70000, Vietnam","coords":{"lat":10.764909247031914,"lng":106.65561452944772},"placeId":"ChIJe6e5fvYvdTERRwacL2aqCfU"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"1","address2":"22 Trần Hưng Đạo, P. Mỹ Thới, Thành phố Long Xuyên, An Giang 90117, Vietnam","coords":{"lat":10.355740776319486,"lng":105.45784141165677},"placeId":"ChIJtyCkzJRzCjERdVOYVpa36b8"},
+          {"title":"VNVC Rạch Giá","address1":"Lô P1","address2":"Số 17-18, Đường 3 Tháng 2, Khu đô thị mới Phú Cường, Rạch Giá, Kiên Giang 91114, Vietnam","coords":{"lat":9.97458959218714,"lng":105.09558912822438},"placeId":"ChIJvYpOtP61oDERsfB_kq9A9as"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"126 Đường Hùng Vương nối dài","address2":"Phường 2, Tân An, Long An 82110, Vietnam","coords":{"lat":10.54617147334014,"lng":106.40107056441803},"placeId":"ChIJubhzbNzJCjERg5nNkMK-Kkg"},
+          {"title":"Trung tâm tiêm chủng vắc xn VNVC Bến Lức","address1":"Tầng trệt Siêu thị Co.opmart Bến Lức","address2":"số 61, QL1A, khu phố 4, Bến Lức, Long An 82606, Vietnam","coords":{"lat":10.637913264756934,"lng":106.48263235889547},"placeId":"ChIJkzdCYoXNCjERKvYCIvY7-0g"},
+          {"title":"VNVC Vũng Tàu","address1":"149 Võ Thị Sáu","address2":"Phường 2, Thành phố Vũng Tầu, Bà Rịa - Vũng Tàu 78000, Vietnam","coords":{"lat":10.337462792059762,"lng":107.08615182944776},"placeId":"ChIJfay0eedvdTEROSX7Qonlpi4"},
+          {"title":"VNVC Bà Rịa","address1":"Trung tâm thương mại Go!","address2":"2A Nguyễn Đình Chiểu, KP 1, Bà Rịa, Bà Rịa - Vũng Tàu 78106, Vietnam","coords":{"lat":10.493196565955369,"lng":107.16821618711988},"placeId":"ChIJWTLcx_1zdTER32zvmu31tGs"},
+          {"title":"VNVC Phan Thiết","address1":"M1","address2":"M2, M3, M4 đường, Tôn Đức Thắng, khu phố 1, Thành phố Phan Thiết, Bình Thuận 77115, Vietnam","coords":{"lat":10.945227488030035,"lng":108.11130922944774},"placeId":"ChIJq0FpM5KDdjERSBQdQ0ZTxw8"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"535 Lê Duẩn","address2":"Thắng Lợi, Thành phố Pleiku, Gia Lai 600000, Vietnam","coords":{"lat":13.972615786027621,"lng":108.04772564662703},"placeId":"ChIJiUybjPIfbDERFoR6jQkyEs8"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"8A Bùi Khắc Nhất","address2":"Khu dân cư An Phú Hưng, Thành phố Thanh Hóa, Thanh Hoá 40124, Vietnam","coords":{"lat":19.8040688300853,"lng":105.79140463558197},"placeId":"ChIJM6pnUhFXNjERke6yGy5F78c"},
+          {"title":"VNVC Triệu Sơn","address1":"53 Phố Giắt","address2":"Minh Châu, Triệu Sơn, Thanh Hoá 41506, Vietnam","coords":{"lat":19.81890988500836,"lng":105.60640330674592},"placeId":"ChIJkzmflPT7NjERY-QDfc5efW4"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"Tiểu Khu 02","address2":"TT. Vạn Hà, Thiệu Hoá, Thanh Hoá 40900, Vietnam","coords":{"lat":19.896421822957688,"lng":105.67929690367012},"placeId":"ChIJDcRZaPXxNjERZNVDST08t3U"},
+          {"title":"VNVC Hoằng Hóa","address1":"Số 216","address2":"DT510, Hoằng Đồng, Hoằng Hoá, Thanh Hoá 40338, Vietnam","coords":{"lat":19.837417486509555,"lng":105.85063153741704},"placeId":"ChIJs_i8A7dZNjER7I807f2kYZI"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"17B Mai Hắc Đế","address2":"Lê Lợi, Thành phố Vinh, Nghệ An 43120, Vietnam","coords":{"lat":18.695840645206886,"lng":105.67470594049283},"placeId":"ChIJPR24nd_POTERCdHllamL1ss"},
+          {"title":"VNVC Hoàng Mai","address1":"Khối 5","address2":"Quỳnh Thiện, Hoàng Mai, Nghệ An 44906, Vietnam","coords":{"lat":19.265161716501247,"lng":105.71529037055224},"placeId":"ChIJbYejnk8LNzERX39Uz0_VS10"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"Số 9 tổ 1","address2":"Khối3, Diễn Châu, Nghệ An 43406, Vietnam","coords":{"lat":18.984586524056844,"lng":105.59975352944775},"placeId":"ChIJo5HQYxp9NzERNxxMgUYlwcY"},
+          {"title":"VNVC Thái Hòa","address1":"38 Lê Hồng Phong","address2":"Khối Tân Thành, TX. Thái Hòa, Nghệ An 44806, Vietnam","coords":{"lat":19.32101348032596,"lng":105.43511014662701},"placeId":"ChIJWW1IAv8VNzERrkrGU9jilj0"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC Đô Lương","address1":"Xóm Yên Trường","address2":"Đô Lương, Nghệ An 44107, Vietnam","coords":{"lat":18.899976484249336,"lng":105.31555907055225},"placeId":"ChIJzYgF8VvhOTERXYrxo-ToTJ8"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"158 Trần Phú","address2":"Hà Tĩnh, Vietnam","coords":{"lat":18.346694178463185,"lng":105.88834001225108},"placeId":"ChIJn6u6jDhPODEROv3nrwyCi_w"},
+          {"title":"2 Duờng Tôn Đức Thắng","address1":"2 Duờng Tôn Đức Thắng","address2":"Đông Thành, Ninh Bình, Vietnam","coords":{"lat":20.26522053818699,"lng":105.97706893439334},"placeId":"ChIJKXVFFlp3NjERqzVT4bLcU5g"},
+          {"title":"VNVC Nam Định","address1":"124 Đại Lộ Đông A","address2":"Lộc Vượng, TP. Nam Định, Nam Định, Vietnam","coords":{"lat":20.4373943635746,"lng":106.15551867055227},"placeId":"ChIJ2Yuv-K_dNTERv10v6R8jGHQ"},
+          {"title":"VNVC CÔNG VIÊN THANH LỄ, BÌNH DƯƠNG","address1":"No. 567 Đại lộ Bình Dương","address2":"Avenue, Thủ Dầu Một, Bình Dương, Vietnam","coords":{"lat":10.989609220735671,"lng":106.65916597607479},"placeId":"ChIJ_YZ58vHRdDER0UULJ_SfkFg"},
+          {"title":"VNVC Dĩ An","address1":"Charm Plaza","address2":"30 DT743C, khu phố thống nhất 1, Dĩ An, Bình Dương 75306, Vietnam","coords":{"lat":10.908558016871375,"lng":106.74247431165675},"placeId":"ChIJrV3U0i_ZdDERMpDOQEdcsjM"},
+          {"title":"VNVC Thuận An","address1":"Tầng 02","address2":"2F02 \u0026 2F05, Lotte Mart Bình Dương, Khu Đô Thị Seasons, P, Thuận An, Bình Dương 75206, Vietnam","coords":{"lat":10.905131646512194,"lng":106.71186232944773},"placeId":"ChIJNXfkYnfXdDER3P_VTU_CyQ8"},
+          {"title":"VNVC Tây Ninh","address1":"219 Ba Mươi Tháng Tư","address2":"Phường 2, Tây Ninh, Vietnam","coords":{"lat":11.312480301076858,"lng":106.09583974723871},"placeId":"ChIJc5eTivZrCzERy4HU0bGqZiI"},
+          {"title":"VNVC Quận 1","address1":"Tầng 2","address2":"Trung tâm thương mại NOWZONE, 235 Nguyễn Văn Cừ, P. Phú Thuận, Quận 1, Thành phố Hồ Chí Minh 71014, Vietnam","coords":{"lat":10.76413028835354,"lng":106.68254442944777},"placeId":"ChIJWyVdP-MvdTERySmCpN7MzU4"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC","address1":"1239 TL8","address2":"ấp Thạnh An, Củ Chi, Thành phố Hồ Chí Minh 71613, Vietnam","coords":{"lat":10.983882935432934,"lng":106.57997397055226},"placeId":"ChIJYaU7U7HTdDERNsfpOpJiXUQ"},
+          {"title":"VNVC Long Khánh","address1":"93","address2":"95 Nguyễn Thị Minh Khai, khu phố 6, Long Khánh, Đồng Nai, Vietnam","coords":{"lat":10.92808444827141,"lng":107.25098592944774},"placeId":"ChIJ3yDdGgf_dDERBw7Gk5RRWU4"},
+          {"title":"VNVC Long Thành","address1":"Lầu 2 Tòa nhà Long Thành Center","address2":"115B Lê Duẩn, Khu Phước hải, TT. Long Thành, Long Thành, Đồng Nai 810000, Vietnam","coords":{"lat":10.79269641168184,"lng":106.94659537055227},"placeId":"ChIJ6w8jut0fdTERsRctqIiX6Yg"},
+          {"title":"VNVC Tân Phú","address1":"Tầng M","address2":"685 Âu Cơ, Tân Thành, Tân Phú, Thành phố Hồ Chí Minh 72000, Vietnam","coords":{"lat":10.789391558565006,"lng":106.63963117055228},"placeId":"ChIJIdwzMn4vdTERTCg1nTzs6HM"},
+          {"title":"VNVC Dong Anh","address1":"Tổ 6","address2":"Đông Anh, Hà Nội, Vietnam","coords":{"lat":21.149882287308156,"lng":105.84641257055225},"placeId":"ChIJsf2zLawBNTERfqxA1tHEauY"},
+          {"title":"VNVC Văn Quán - Hà Đông","address1":"Tầng 3","address2":"tòa nhà NewSkyline, lô CC2 khu đô thị mới, Q, Yên Phúc, Hà Đông, Hà Nội 12109, Vietnam","coords":{"lat":20.976377986981404,"lng":105.78943071165673},"placeId":"ChIJN5JH1j2tNTERJ5HK8Av8h8E"},
+          {"title":"VNVC Long Biên","address1":"69a1 P. Hoàng Như Tiếp","address2":"Bồ Đề, Long Biên, Hà Nội 11813, Vietnam","coords":{"lat":21.0417615158889,"lng":105.87687023741701},"placeId":"ChIJw59iuX2pNTERLGSKUsjfJy0"},
+          {"title":"VNVC My Dinh","address1":"Tầng 2- Tháp R1 tòa nhà Florence 28 Trần Hữu Dực phường Cầu Diễn","address2":"Mỹ Đình 1, Từ Liêm, Hà Nội 12006, Vietnam","coords":{"lat":21.030492082646283,"lng":105.76138632944776},"placeId":"ChIJVSf5p39VNDERxpLh1oo5UVE"},
+          {"title":"VNVC Phổ Yên","address1":"588 Phạm Văn Đồng","address2":"tổ dân phố 2, Phổ Yên, Thái Nguyên 24706, Vietnam","coords":{"lat":21.42006553487974,"lng":105.86955758834321},"placeId":"ChIJPUqDU8UfNTERfbc2wpYYM0I"},
+          {"title":"VNVC Phú Thọ","address1":"Lô CC17","address2":"Quảng Trường Hùng Vương, Ph.Gia Cẩm, Thành phố Việt Trì, Phú Thọ 35124, Vietnam","coords":{"lat":21.314403278844715,"lng":105.39233591165676},"placeId":"ChIJXYKaxSuNNDERszZuGmvbArw"},
+          {"title":"VNVC Sơn Tây","address1":"số 1 đường La Thành","address2":"phường Phú Thịnh, thị xã Sơn Tây, P. Ngô Quyền, Sơn Tây, Hà Nội 12708, Vietnam","coords":{"lat":21.14656512737932,"lng":105.49886821165674},"placeId":"ChIJG0ZbDF71NDERUNNTHxcxkmo"},
+          {"title":"Trung tâm tiêm chủng vắc xin VNVC - Thái Bình","address1":"Tầng 1","address2":"Trung tâm thương mại Go!, Trần Thái Tông, Tổ 1, Thái Bình, 06114, Vietnam","coords":{"lat":20.439083668428655,"lng":106.32159842944772},"placeId":"ChIJHUV5NFzlNTERWPJGgLQeaUk"},
+          {"title":"VNVC Thái Nguyên","address1":"38 Đ. Minh Cầu","address2":"Phan Đình Phùng, Thành phố Thái Nguyên, Thái Nguyên, Vietnam","coords":{"lat":21.593995576510405,"lng":105.83283551165678},"placeId":"ChIJATpr548nNTERUISNGx4DZs4"},
+          {"title":"VNVC Yên Bái","address1":"34 Nguyễn Văn Cừ","address2":"P.Đồng Tâm, Thành phố Yên Bái, Yên Bái 33121, Vietnam","coords":{"lat":21.720988207831553,"lng":104.91790670246411},"placeId":"ChIJTQPzApVbMzERbjLN_yuDiZE"},
+          {"title":"Trung tâm tiêm chủng Chất lượng cao FUFU VAC","address1":"660A Đ. Hà Huy Tập","address2":"Yên Viên, Gia Lâm, Hà Nội, Vietnam","coords":{"lat":21.092250968036286,"lng":105.92428645276127},"placeId":"ChIJyXL2K_6pNTERWCklIWs9wgA"},
+          {"title":"Center for Immunization Vaccines Polyvac - Ministry of Health","address1":"Số 418 Vĩnh Hưng","address2":"P, Hoàng Mai, Hà Nội, Vietnam","coords":{"lat":20.995955321666237,"lng":105.88010327055227},"placeId":"ChIJG2VL4qiuNTERDA18W4d54DM"},
+          {"title":"TRUNG TÂM TIÊM CHỦNG POLYVAC - GIA LÂM","address1":"17 P. Thuận An","address2":"Trâu Quỳ, Gia Lâm, Hà Nội, Vietnam","coords":{"lat":21.012287569472186,"lng":105.94133057055224},"placeId":"ChIJh9bIYq2pNTEREUaUtrAtrl4"},
+          {"title":"Phòng tiêm chủng Vắc xin Safpo","address1":"135 P. Lò Đúc","address2":"Phạm Đình Hổ, Hai Bà Trưng, Hà Nội, Vietnam","coords":{"lat":21.012692917367733,"lng":105.85865872944775},"placeId":"ChIJFXGWuvarNTERQWmLdrUkiUA"},
+          {"title":"Trung tâm Y tế huyện Sóc Sơn","address1":"Phù Linh","address2":"Sóc Sơn, Hà Nội, Vietnam","coords":{"lat":21.2628836158499,"lng":105.84944127055225},"placeId":"ChIJM8anyRUDNTER2-F8iatXTWA"},
+          {"title":"Vabiotech Vaccines Center","address1":"BT D14","address2":"B5, Làng Quốc tế Thăng Long, Cầu Giấy, Hà Nội, Vietnam","coords":{"lat":21.03957246496385,"lng":105.79345507055227},"placeId":"ChIJxe6XfDerNTER27dGaqBSaIo"},
+          {"title":"Vabiotech Care","address1":"B12/CC3 Khu đô thị Nam Trung Yên","address2":"P. Mạc Thái Tông, Ngã tư, Cầu Giấy, Hà Nội 10000, Vietnam","coords":{"lat":21.01144516491613,"lng":105.79128637055224},"placeId":"ChIJkzzuejerNTER2wu4_4zsY-U"},
+          {"title":"Trung tâm tiêm chủng HAPPY SKY","address1":"6 BT1B","address2":"P. Bùi Xuân Phái, Mỹ Đình, Nam Từ Liêm, Hà Nội 12014, Vietnam","coords":{"lat":21.03265420912787,"lng":105.76660091165675},"placeId":"ChIJDdkAYuRVNDERgwVgPR8urIM"},
+          {"title":"Phòng tiêm chủng vắc xin dịch vụ CAPO - Golden An Khánh","address1":"Thửa đất số 94","address2":"khu đất dịch vụ xã, An Thọ, Hoài Đức, Hà Nội, Vietnam","coords":{"lat":21.0068423087589,"lng":105.72645857055224},"placeId":"ChIJpy4u_chTNDER27kIMwW3-mI"},
+          {"title":"Thien Hanh Hospital","address1":"17 Nguyễn Chí Thanh","address2":"Tân An, Thành phố Buôn Ma Thuột, Đắk Lắk, Vietnam","coords":{"lat":12.69834642319552,"lng":108.07110901165674},"placeId":"ChIJAavqdcD3cTER2uIswnkyRyU"},
+          {"title":"59 Hai Bà Trưng","address1":"59 Hai Bà Trưng","address2":"Thắng Lợi, Thành phố Buôn Ma Thuột, Đắk Lắk, Vietnam","coords":{"lat":12.683006807758694,"lng":108.04410807055224},"placeId":"ChIJv3eb5X4dcjERpGfAr-yLqAQ"},
+          {"title":"Duc Tam Children\u0027s Hospital","address1":"Tổ 1","address2":"Khối 7, Đường 10/3, P, Thành phố Buôn Ma Thuột, Đắk Lắk, Vietnam","coords":{"lat":12.716636015202418,"lng":108.06993288220903},"placeId":"ChIJVUKUmvT3cTERxhzrWTX-7rU"},
+          {"title":"Phòng tiêm chủng - Phòng khám - Quầy thuốc Cenvac","address1":"km 09","address2":"QL14, Ea Tu, Thành phố Buôn Ma Thuột, Đắk Lắk, Vietnam","coords":{"lat":12.728072335833911,"lng":108.10501062944775},"placeId":"ChIJ5wEqe3X5cTER-jjIytWOfJA"},
+          {"title":"PHÒNG TIÊM CHỦNG BUÔN HỒ","address1":"02 Tôn Thất Tùng","address2":"Phường An Lạc, Buôn Hồ, Đắk Lắk, Vietnam","coords":{"lat":12.912067060454651,"lng":108.26685561165677},"placeId":"ChIJt2rGAhQdbjEROMnQhwEPYMk"},
+          {"title":"Phòng khám đa khoa Sài Gòn Ban Mê","address1":"18A Nguyễn Tất Thành (Đi cổng","address2":"số 07 Bà Triệu, Tự An, Thành phố Buôn Ma Thuột, Đắk Lắk 63000, Vietnam","coords":{"lat":12.682062800000008,"lng":108.04904991165674},"placeId":"ChIJ_ynLb8r3cTERr13eEf-wrqA"},
+          {"title":"Phòng tiêm chủng - tư vấn dinh dưỡng","address1":"35 P. Lê Văn Thiêm","address2":"Thanh Xuân Trung, Thanh Xuân, Hà Nội, Vietnam","coords":{"lat":20.99991729989629,"lng":105.80427562944776},"placeId":"ChIJWT6hcw2tNTERcEy4v_zhV-U"},
+          {"title":"Cơ sở tiêm chủng Pasteur Daklak","address1":"170 Xô Viết Nghệ Tĩnh","address2":"Thành Công, Thành phố Buôn Ma Thuột, Đắk Lắk 630000, Vietnam","coords":{"lat":12.68563068077854,"lng":108.04077242270183},"placeId":"ChIJZfbf5iEdcjERlg7FLd7ycKE"},
+          {"title":"Phòng Khám Bác Sĩ Hùng Ly","address1":"C53Q+GFJ","address2":"Liên Sơn, Lắk District, Dak Lak, Vietnam","coords":{"lat":12.403850004656281,"lng":108.18864462392524},"placeId":"ChIJIU0FQACPcTER6r0MZW3ngI0"},
+          {"title":"Phòng Khám Nhi Vinh An","address1":"11 Hai Bà Trưng","address2":"Thắng Lợi, Thành phố Buôn Ma Thuột, Đắk Lắk, Vietnam","coords":{"lat":12.68048704484486,"lng":108.04411782944774},"placeId":"ChIJ_____34dcjERD5WDusdmr2I"},
+          {"title":"PHÒNG TIÊM CHỦNG KRÔNG NĂNG","address1":"115 Nguyễn Tất Thành","address2":"Krông Năng, Đắk Lắk 63406, Vietnam","coords":{"lat":12.951366048073222,"lng":108.33834162944775},"placeId":"ChIJpyRFTn8fbjERyBVRxxDTaEk"},
+          {"title":"Phòng Khám Đa Khoa Tâm Phúc","address1":"462 Giải Phóng","address2":"TT. Ea Drăng, EaH\u0027leo, Đắk Lắk 630000, Vietnam","coords":{"lat":13.2012371136846,"lng":108.20561448834324},"placeId":"ChIJqdT_Rw4NbjERJljPDCuwFrU"},
+          {"title":"Công Ty TNHH Phòng Khám Tâm Phúc Ea Kar","address1":"RF63+XF8","address2":"209 A Nguyễn Tất Thành, Tổ Dân Phố 3b, Ea Kar, Đắk Lắk, Vietnam","coords":{"lat":12.812428648578749,"lng":108.45373107055228},"placeId":"ChIJ0aEhG0fecTERLsm21qSXlyY"},
+          {"title":"152 QL27","address1":"152 QL27","address2":"Ea tur, Cư Kuin, Đắk Lắk, Vietnam","coords":{"lat":12.626084190177835,"lng":108.12654768834324},"placeId":"EjExNTIgUUwyNywgRWEgdHVyLCBDxrAgS3VpbiwgxJDhuq9rIEzhuq9rLCBWaWV0bmFtIjESLwoUChIJM79zRxz0cTERLnadkFQ_SEEQmAEqFAoSCX07WsfZgnExEWu99FVV2fZu"},
+          {"title":"Phòng tiêm chủng Thanh Hà","address1":"257A Hùng Vương","address2":"Ea Súp, Đắk Lắk 63000, Vietnam","coords":{"lat":13.074436556719949,"lng":107.88903071717928},"placeId":"ChIJzfYacgP7bTER1XafiRyLQVw"},
+          {"title":"Bệnh Viện Đa Khoa Huyện Krông Pắk","address1":"147 Lê Duẩn","address2":"Phước An, Krông Pắc, Đắk Lắk, Vietnam","coords":{"lat":12.706412637038142,"lng":108.30171021165675},"placeId":"ChIJR48L5YnlcTERRTawzytNZ2A"},
+          {"title":"Thôn 4","address1":"Thôn 4","address2":"Ea M\u0027Tá, Ea Bhôk, Cư Kuin, Đắk Lắk, Vietnam","coords":{"lat":12.574707495158085,"lng":108.16583577055226},"placeId":"EjxUaMO0biA0LCBFYSBNJ1TDoSwgRWEgQmjDtGssIEPGsCBLdWluLCDEkOG6r2sgTOG6r2ssIFZpZXRuYW0iLiosChQKEgkJm3DhcvNxMRFX8yMFNNJFUhIUChIJER6u-XLzcTER1y5Ft1ZdqfE"},
+          {"title":"Phòng tiêm chủng Ea Súp","address1":"144 Hùng Vương","address2":"Ea Súp, Đắk Lắk, Vietnam","coords":{"lat":13.075519722791642,"lng":107.88951160613422},"placeId":"ChIJOwk42637bTER0sETC5TTeAQ"},
+          {"title":"Phòng tiêm chủng vắc xin Cenvac 2","address1":"337 Lê Duẩn","address2":"Tân Thành, Thành phố Buôn Ma Thuột, Đắk Lắk, Vietnam","coords":{"lat":12.660997349794872,"lng":108.03220537055222},"placeId":"ChIJgRyBdI8dcjERgKfo0QJ2RNM"},
+          {"title":"Buon Ma Thuot University Hospital of Medicine and Pharmacy","address1":"298 Hà Huy Tập","address2":"Tân An, Thành phố Buôn Ma Thuột, Đắk Lắk 63000, Vietnam","coords":{"lat":12.713589254111897,"lng":108.07150420674591},"placeId":"ChIJe46baAD3cTERvo8uqWbWl7k"},
+          {"title":"Trung tâm xét nghiệm BMT","address1":"170 Đinh Tiên Hoàng","address2":"Tự An, Thành phố Buôn Ma Thuột, Đắk Lắk, Vietnam","coords":{"lat":12.66920744259293,"lng":108.04337706441802},"placeId":"ChIJd5w6i-UTcTERYUX_CDCPilg"},
+          {"title":"Phuoc An- polyclinics KrongPac","address1":"143 Giải Phóng","address2":"Phước An, Krông Pắc, Đắk Lắk, Vietnam","coords":{"lat":12.710716837642094,"lng":108.30976132944777},"placeId":"ChIJbVx7WInlcTERSc92tu4IEMg"},
+          {"title":"30 Trần Nhật Duật","address1":"30 Trần Nhật Duật","address2":"Tân Lợi, Thành phố Buôn Ma Thuột, Đắk Lắk, Vietnam","coords":{"lat":12.69169549453512,"lng":108.05487412944775},"placeId":"ChIJg7jaftn3cTER-He54o1PK2c"},
+          {"title":"Phòng Tiêm Chủng Krông Ana","address1":"46 Nguyễn Tất Thành","address2":"Buôn Trấp, KRông Ana, Đắk Lắk, Vietnam","coords":{"lat":12.48231722756673,"lng":108.03052177055226},"placeId":"ChIJtY1wK50hcjERJpzUqa6Ku4g"},
+          {"title":"Phòng Tiêm Chủng Vắc Xin","address1":"30 Trần Nhật Duật","address2":"Tân Lợi, Thành phố Buôn Ma Thuột, Đắk Lắk, Vietnam","coords":{"lat":12.691742766931924,"lng":108.05482341165674},"placeId":"ChIJYcgbO9r3cTERxGtbeJWphGQ"},
+          {"title":"5 Lê Duẩn","address1":"5 Lê Duẩn","address2":"Krông Năng, Đắk Lắk, Vietnam","coords":{"lat":12.94984090411479,"lng":108.33877451165675},"placeId":"ChIJyxq_4KMebjEReyM2jAEL724"},
+          {"title":"Cenvac Phước An 3","address1":"371 Giải Phóng","address2":"Phước An, Krông Pắc, Đắk Lắk 630000, Vietnam","coords":{"lat":12.712110522646693,"lng":108.29591357055227},"placeId":"ChIJRbAcLQLlcTERyi2RvNL5LBg"},
+          {"title":"Phong Tiem Chung Potec 53 Daklak","address1":"45 Tôn Đức Thắng","address2":"Tân An, Thành phố Buôn Ma Thuột, Đắk Lắk, Vietnam","coords":{"lat":12.697486062999213,"lng":108.06365245276129},"placeId":"ChIJfVdGTcL3cTERYmodBUlBYJk"},
+          {"title":"PHÒNG TIÊM CHỦNG VẮC XIN SAFPO 34 ĐẮK NÔNG","address1":"4 Phan Đăng Lưu","address2":"Phường Nghĩa Trung, Gia Nghĩa, Đăk Nông, Vietnam","coords":{"lat":11.999110996895066,"lng":107.69629447055227},"placeId":"ChIJz7mayyTHczERBYh97zNVuow"},
+          {"title":"Tiêm chủng dịch vụ HEXA PROTECT","address1":"Số nhà","address2":"17 Nơ Trang Lơng, TDP 3, Krông Nô, Đăk Nông 65300, Vietnam","coords":{"lat":12.466761946337105,"lng":107.86111227055227},"placeId":"ChIJj4n1RI0lcjERaE_proqafx4"},
+          {"title":"Phòng tiêm chủng dịch vụ vắc xin cư jut","address1":"170A Trần Hưng Đạo","address2":"Ea T\u0027Ling, Cư Jút, Đăk Nông, Vietnam","coords":{"lat":12.584687059097355,"lng":107.88590357055227},"placeId":"ChIJEe4ItRUZcjER2KYPTlrjApI"},
+          {"title":"Phòng Khám Đa Khoa Tâm Phúc ĐăkMil","address1":"12 Nguyễn Chí Thanh","address2":"Đắk Mil, Đăk Nông, Vietnam","coords":{"lat":12.449377000330022,"lng":107.62009487055225},"placeId":"ChIJHYjh_pVHcjERod0FFVA_Ir8"},
+          {"title":"Phòng Khám - Bs Nguyễn Đình Huy","address1":"30 Lê Duẩn","address2":"Đắk Mil, Đăk Nông, Vietnam","coords":{"lat":12.445804551198435,"lng":107.62389621165674},"placeId":"ChIJO2kvUgBHcjER7uNw4oldvqg"},
+          {"title":"Phòng khám đa khoa phúc an","address1":"XGW4+C4G","address2":"TT. Kiến Đức, Đăk R\u0027Lấp District, Dak Nong, Vietnam","coords":{"lat":11.995907051590686,"lng":107.50544484110448},"placeId":"ChIJmWzuBgO7czERzoddP6LoeD4"},
+          {"title":"Bệnh viện đa khoa Đăk R\u0027Lấp","address1":"XGW4+P3F","address2":"TT. Kiến Đức, Đăk R\u0027Lấp District, Dak Nong, Vietnam","coords":{"lat":11.996816027295084,"lng":107.5044592067459},"placeId":"ChIJDcmgzBe7czERMMYu6LwbOAI"},
+          {"title":"Medical Center of Bao Loc City","address1":"10 Đinh Tiên Hoàng","address2":"Phường 1, Bảo Lộc, Lâm Đồng, Vietnam","coords":{"lat":11.556019389927382,"lng":107.80934936441804},"placeId":"ChIJNWPTRv72czER1BXQct1Ea00"},
+          {"title":"Phòng khám Đa khoa Sài Gòn - Bảo Lộc","address1":"30A Trần Quốc Toản","address2":"P. Blao, Bảo Lộc, Lâm Đồng, Vietnam","coords":{"lat":11.541617169558807,"lng":107.80853327055227},"placeId":"ChIJz0tofE32czERY0wEYHmlme8"},
+          {"title":"Tiêm Chủng An Bình","address1":"GF5P+HX4","address2":"Đạ Tẻh, Đạ Tẻh District, Lam Dong, Vietnam","coords":{"lat":11.508887514139944,"lng":107.48744852944775},"placeId":"ChIJgYp0_kd3dDER0Zh3nhSmJVo"},
+          {"title":"Cơ Sở Tiêm Chủng Vắc Xin Dịch Vụ Việt Hà","address1":"Lộc Thắng","address2":"Bảo Lâm District, Lam Dong, Vietnam","coords":{"lat":11.630584630558841,"lng":107.83693031165677},"placeId":"ChIJJ0PM_IzwczERe1ep_JL5caA"},
+          {"title":"Phòng Khám Đa Khoa Tâm Phúc Di Linh","address1":"1080 Hùng Vương","address2":"Di Linh, Lâm Đồng 12345, Vietnam","coords":{"lat":11.591608547262105,"lng":108.07957132944772},"placeId":"ChIJyaOWCNVXcTERLsira79Bc-Q"},
+          {"title":"Phòng Khám Đa Khoa Phương Nam - Đà Lạt","address1":"81 Phan Đình Phùng","address2":"Phường 1, Thành phố Đà Lạt, Lâm Đồng, Vietnam","coords":{"lat":11.943918892940566,"lng":108.43396478834323},"placeId":"ChIJg_U2_MoTcTERU5RnofNi0gs"},
+          {"title":"Phòng Tiêm Chủng Lâm Viên","address1":"106a Nguyễn Văn Trỗi","address2":"Phường 2, Thành phố Đà Lạt, Lâm Đồng, Vietnam","coords":{"lat":11.948255211894969,"lng":108.43710945276125},"placeId":"ChIJOZKEHaETcTEROZ0r3QybMoQ"},
+          {"title":"Trung tâm tiêm chủng vắc xin Hạnh Phúc","address1":"25 Đinh Tiên Hoàng","address2":"Phường 1, Bảo Lộc, Lâm Đồng 66450, Vietnam","coords":{"lat":11.553568080146471,"lng":107.80880111165676},"placeId":"ChIJ7Ui1bbP3czER1IqLLPPx_GM"},
+          {"title":"Trung Tâm Tiêm Chủng Vắc Xin Cộng Đồng","address1":"87 Đinh Tiên Hoàng","address2":"Phường 1, Bảo Lộc, Lâm Đồng, Vietnam","coords":{"lat":11.556092452356895,"lng":107.80909314293956},"placeId":"ChIJCR3fTXT3czERRKCVKNmb5x4"},
+          {"title":"Pasteur Medical Center Dalat","address1":"16 Đường Lê Hồng Phong","address2":"Phường 4, Thành phố Đà Lạt, Lâm Đồng, Vietnam","coords":{"lat":11.933019131045226,"lng":108.42765903558195},"placeId":"ChIJOzQvrTQTcTERZbTf9E7BNk0"},
+          {"title":"Hoan My Hospital - Da Lat","address1":"Đồi Long Thọ","address2":"Đường Mimoza, Phường 10, Phường 10, Thành phố Đà Lạt, Lâm Đồng 671210, Vietnam","coords":{"lat":11.923314075659656,"lng":108.45838423558196},"placeId":"ChIJ398-iGwTcTERU-XDOqCanfI"},
+          {"title":"Trung tâm Y tế huyện Đơn Dương","address1":"46 Phạm Ngọc Thạch","address2":"TT. Thạnh Mỹ, Đơn Dương, Lâm Đồng, Vietnam","coords":{"lat":11.757318127367423,"lng":108.48437703558199},"placeId":"ChIJcw7iC-U-cTER7L1OXsG0F1s"},
+          {"title":"Phòng Khám Đa Khoa Hiếu Thảo","address1":"8 Ngô Gia Tự","address2":"Liên Nghĩa, Đức Trọng, Lâm Đồng 670000, Vietnam","coords":{"lat":11.731680459293836,"lng":108.37444031165676},"placeId":"ChIJtYG6sV9HcTERiO40DSHbGqM"},
+          {"title":"Medical Center of Di Linh District","address1":"Khu 10","address2":"Di Linh, Lâm Đồng, Vietnam","coords":{"lat":11.569471703757797,"lng":108.07116073558196},"placeId":"ChIJNbVR-udVcTERIG31zzPjxbI"},
+          {"title":"Phòng khám chuyên khoa nhi - bệnh viện mêkông","address1":"309/8 Nguyễn Văn Trỗi","address2":"Phường 1, Tân Bình, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.798788882847791,"lng":106.66771942270185},"placeId":"ChIJVz6s7OIpdTERU9PP5Ux74es"},
+          {"title":"An Sinh Hospital","address1":"10 Trần Huy Liệu","address2":"Phường 11, Phú Nhuận, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.791310422816888,"lng":106.67846689325408},"placeId":"ChIJ0RYIPNUodTER59_xzR0dlDQ"},
+          {"title":"Phòng Khám Đa Khoa Trần Diệp Khanh","address1":"41/21 Nguyễn Oanh","address2":"Phường 10, Gò Vấp, Thành phố Hồ Chí Minh 700000, Vietnam","coords":{"lat":10.828284234223931,"lng":106.67826709325409},"placeId":"ChIJa99j2P0odTEROWh1VSAf7zM"},
+          {"title":"My Duc Hospital","address1":"4 Đường Núi Thành","address2":"Phường 13, Tân Bình, Thành phố Hồ Chí Minh 70000, Vietnam","coords":{"lat":10.799914594637094,"lng":106.6415666067459},"placeId":"ChIJc1nmLk4pdTERW_77fl2E8Rs"},
+          {"title":"Phòng tiêm vắc xin TH Care Vinh","address1":"172 Nguyễn Du","address2":"Bến Thủy, Thành phố Vinh, Nghệ An, Vietnam","coords":{"lat":18.655980517448302,"lng":105.69786646441801},"placeId":"ChIJjUVsTVrNOTERnwySaUXQ4a4"},
+          {"title":"Phòng tiêm vắc xin TH Care Vinh 2","address1":"14 Phan Đình Phùng","address2":"Cửa Nam, Thành phố Vinh, Nghệ An 43114, Vietnam","coords":{"lat":18.665700619066424,"lng":105.66614562944777},"placeId":"ChIJf2G_1v7POTERA7EpCAVy7DE"},
+          {"title":"Phòng tiêm vắc xin TH Care Diễn Châu 1","address1":"Khối 2","address2":"Diễn Châu, Nghệ An 43406, Vietnam","coords":{"lat":18.985848188887847,"lng":105.59949282944775},"placeId":"ChIJjTmg5719NzERX2qqXs-ZZGc"},
+          {"title":"Phòng tiêm vắc xin TH Care Diễn Châu 2","address1":"Khối Bắc","address2":"Diễn Châu, Nghệ An 43436, Vietnam","coords":{"lat":19.05265529952449,"lng":105.58256727055229},"placeId":"ChIJj5XvXzZlNzERnBqG_gJYM5U"},
+          {"title":"Phòng tiêm vắc xin TH Care Đô Lương","address1":"QL7","address2":"Khối 7, Đô Lương, Nghệ An, Vietnam","coords":{"lat":18.896675406473694,"lng":105.301562035582},"placeId":"ChIJzWOUcabjOTERQ7J8i62SdAg"},
+          {"title":"Phòng tiêm vắc xin TH Care Quỳnh Lưu","address1":"Quỳnh Hồng","address2":"Quỳnh Lưu District, Nghe An 465370, Vietnam","coords":{"lat":19.143502150206274,"lng":105.63844867790984},"placeId":"ChIJB-1GM-BxNzERL2c9dhV104A"},
+          {"title":"Phòng tiêm vắc xin TH Care Yên Thành","address1":"XFXH+CJQ","address2":"QL 7B, khối 3, Yên Thành, Nghệ An, Vietnam","coords":{"lat":18.998584430290652,"lng":105.47910781165676},"placeId":"ChIJ4SyqJzBhNzERYcf9gnl9pwk"},
+          {"title":"Phòng tiêm vắc xin TH Care Thái Hòa","address1":"04 Đường Lê Hồng Phong","address2":"Hòa Hiếu, TX. Thái Hòa, Nghệ An, Vietnam","coords":{"lat":19.321987054129366,"lng":105.43510206441803},"placeId":"ChIJrR12cxEVNzER9eK7C7MN-nc"},
+          {"title":"Phòng tiêm vắc xin TH Care Đức Thọ","address1":"28 Đường Nguyễn Thị Minh Khai","address2":"TT. Đức Thọ, Đức Thọ, Hà Tĩnh, Vietnam","coords":{"lat":18.53682028749474,"lng":105.58426193558195},"placeId":"ChIJ_YqWYsLHOTER1cHY2P0Okx0"},
+          {"title":"Trung Tâm tiêm chủng quốc tế VIA","address1":"72 Lý Thường Kiệt","address2":"Lê Lợi, Thành phố Vinh, Nghệ An, Vietnam","coords":{"lat":18.68004951872502,"lng":105.67030376441804},"placeId":"ChIJp2nw7jrPOTERPlTErzIFF7A"},
+          {"title":"Trung Tâm Tiêm Chủng VIA Cửa Lò","address1":"Nguyễn Thức Đường","address2":"Nghi Hương, Cửa Lò, Nghệ An, Vietnam","coords":{"lat":18.79973133902869,"lng":105.72653376441801},"placeId":"ChIJ4x0hHnXVOTER90nFK2arqN8"},
+          {"title":"Trung tâm tiêm chủng vắc xin VIA Cẩm Xuyên","address1":"QL1A","address2":"TT. Cẩm Xuyên, Cẩm Xuyên, Hà Tĩnh, Vietnam","coords":{"lat":18.25828293915146,"lng":105.98887403558197},"placeId":"ChIJvU3U38RbODERCW41HCaQlZ4"},
+          {"title":"Tiêm chủng vaccine VIA Can Lộc","address1":"Số 121 đường Nguyễn Tất Thành","address2":"TT. Nghèn, Can Lộc, Hà Tĩnh 45306, Vietnam","coords":{"lat":18.462174595427754,"lng":105.77000926441806},"placeId":"ChIJ7fxUqYK1OTER1Lj72LwFfRM"},
+          {"title":"Trung tâm tiêm chủng vắc xin VIA - Hương Sơn","address1":"108 Đường Trần Kim Xuyến","address2":"TT. Phố Châu, Hương Sơn, Hà Tĩnh, Vietnam","coords":{"lat":18.503316101284916,"lng":105.4247443116568},"placeId":"ChIJp98Yh0a_OTERMI0rmYTHsAI"},
+          {"title":"Phòng Tiêm Chủng Vắc-Xin Nutivac Thanh Chương","address1":"8 Võ Thúc Đồng","address2":"Khối 3A, Thanh Chương, Nghệ An 44706, Vietnam","coords":{"lat":18.779191913706182,"lng":105.33598669325409},"placeId":"ChIJl18VDA3nOTERz6NumHkRi-I"},
+          {"title":"Phòng Tiêm Chủng Vắc-Xin Nutivac Nam Đàn","address1":"Đối Diện Nhà Gủi Xe Chợ Sen Khối nam bắc sơn trung tâm thương mại chợ sen","address2":"Nam Đàn, Nghệ An 44606, Vietnam","coords":{"lat":18.705244495955665,"lng":105.49417233558195},"placeId":"ChIJI3sjkkLDOTERIYmwOhLT-eU"},
+          {"title":"Trung Tâm Y Tế Huyện Đô Lương","address1":"V7WX+V64","address2":"QL7, Lưu Sơn, Đô Lương, Nghệ An, Vietnam","coords":{"lat":18.89712304943112,"lng":105.29809686441803},"placeId":"ChIJbzpIeTziOTERCxPi2xNBHbE"},
+          {"title":"Bệnh viện Phụ sản TP. Cần Thơ","address1":"106 Đ. Cách Mạng Tháng 8","address2":"Cái Khế, Ninh Kiều, Cần Thơ, Vietnam","coords":{"lat":10.050788028602865,"lng":105.77696222944775},"placeId":"ChIJW1RWhOOHoDERB9gEt6uFtJc"},
+          {"title":"Can Tho Children\u0027s Hospital","address1":"345 Nguyễn Văn Cừ nối dài","address2":"An Bình, Ninh Kiều, Cần Thơ, Vietnam","coords":{"lat":10.017118057027885,"lng":105.73919173558195},"placeId":"ChIJwVi90BiIoDERrSohVgz2HgA"},
+          {"title":"Trung tâm chẩn đoán y khoa Center Lab","address1":"181 Võ Văn Kiệt","address2":"Phường An Khánh, Bình Thủy, Cần Thơ 900000, Vietnam","coords":{"lat":10.047124585795974,"lng":105.7596656883432},"placeId":"ChIJ1_5HOWCJoDERz0nA1blFgFw"},
+          {"title":"BỆNH VIỆN QUỐC TẾ PHƯƠNG CHÂU - SÓC TRĂNG","address1":"HXX5+MR9","address2":"QL1A, Phường 2, Sóc Trăng, Vietnam","coords":{"lat":9.599561542518593,"lng":105.96047207804872},"placeId":"ChIJMV1NVFhToDER4JKwF9Pmz9Q"},
+          {"title":"Soc Trang Pediatric Hospital","address1":"645 Tôn Đức Thắng","address2":"Phường 5, Sóc Trăng, Vietnam","coords":{"lat":9.639483802949847,"lng":105.99130566441805},"placeId":"ChIJVXvOgf1NoDEREMYxceJ1AhE"},
+          {"title":"Phòng khám đa khoa Minh Hải","address1":"214 Lý Thường Kiệt","address2":"Phường 6, Thành phố Cà Mau, Cà Mau, Vietnam","coords":{"lat":9.174212293062265,"lng":105.16019876441804},"placeId":"ChIJxbhwlbRJoTER3srcT0WFbhE"},
+          {"title":"Hospital Happiness","address1":"234 Trần Hưng Đạo","address2":"P. Mỹ Thới, Thành phố Long Xuyên, An Giang, Vietnam","coords":{"lat":10.354770929815707,"lng":105.45861086441803},"placeId":"ChIJJY1j5AJzCjERygZWMIqBwsk"},
+          {"title":"Phòng tiêm chủng và dịch vụ Phú Cường","address1":"312 Lý Thái Tổ","address2":"Mỹ Long, Thành phố Long Xuyên, An Giang, Vietnam","coords":{"lat":10.376849268378372,"lng":105.44111619325409},"placeId":"ChIJ9WQApPhzCjER4fxyX60uTRM"},
+          {"title":"Phòng tiêm chủng vắc xin Việt Đức 2","address1":"258","address2":"268 Lê Lợi, TT. An Châu, Châu Thành, An Giang, Vietnam","coords":{"lat":10.441359499394771,"lng":105.391561635582},"placeId":"ChIJAcFO32ETCjERQV8fyBTaw7U"},
+          {"title":"BVĐK Huỳnh Trung Dũng","address1":"334 QL91","address2":"Vĩnh Thạnh Trung, Châu Phú, An Giang 882800, Vietnam","coords":{"lat":10.595224561029246,"lng":105.2249788509262},"placeId":"ChIJXZL1F7ciCjERUQ6EYuh86Ss"},
+          {"title":"Bệnh viện đa khoa Nhật Tân","address1":"Phan Đình Phùng","address2":"Châu Phú B, Châu Đốc, An Giang, Vietnam","coords":{"lat":10.704077611673473,"lng":105.12636293558195},"placeId":"ChIJDRCLKyEhCjERERnL7r_maTE"},
+          {"title":"Phòng Chẩn Đoán Y Khoa - Tiêm chủng Hoàn Hảo 2","address1":"số 80A Tôn Đức Thắng","address2":"TT. Phú Mỹ, Phú Tân, An Giang, Vietnam","coords":{"lat":10.594288205658634,"lng":105.35335161165676},"placeId":"ChIJKZ7xz4YVCjERt2tBUVAAOpQ"},
+          {"title":"An Giang Maternity and Children\u0027s Hospital","address1":"02 Lê Lợi","address2":"P. Mỹ Bình, Thành phố Long Xuyên, An Giang, Vietnam","coords":{"lat":10.386995234322892,"lng":105.43938347055226},"placeId":"ChIJ_cNHd-9yCjERJU3hS6NdPsY"},
+          {"title":"Phòng Khám Đa Khoa An Hoà","address1":"20-21-22 L10","address2":"Phan Thị Ràng, P. An Hoà, Rạch Giá, Kiên Giang, Vietnam","coords":{"lat":9.969385027262279,"lng":105.10764276441802},"placeId":"ChIJX7Iqgzm0oDER387CEiY1FJk"},
+          {"title":"Vinmec International Hospital","address1":"458 P. Minh Khai","address2":"Khu đô thị Times City, Hai Bà Trưng, Hà Nội, Vietnam","coords":{"lat":20.996223025378935,"lng":105.86690903558195},"placeId":"ChIJd7js2gSsNTERTMtPtgIeHu8"},
+          {"title":"Binh An Hospital","address1":"80","address2":"82 Nguyễn Trung Trực, Phường Vĩnh Bảo, Rạch Giá, Kiên Giang 92000, Vietnam","coords":{"lat":10.004572151462048,"lng":105.08655863558198},"placeId":"ChIJzehLlYazoDERTl3nY-xTs7M"},
+          {"title":"SOS Medical Clinic Phu Quoc","address1":"Kp5","address2":"269 Đường Nguyễn Trung Trực, TT. Dương Đông, Phú Quốc, Kiên Giang, Vietnam","coords":{"lat":10.223578208520065,"lng":103.97017022944773},"placeId":"ChIJ8Vgk4JmLpzERTWLfLcDZeec"},
+          {"title":"International Hospital Vinmec Phu Quoc","address1":"Bãi Dài","address2":"Gành Dầu, Phú Quốc, Kiên Giang 920000, Vietnam","coords":{"lat":10.336366540329918,"lng":103.85685233558199},"placeId":"ChIJefBbxkUeCDERyTiCrrnkvSw"},
+          {"title":"Hung Vuong Hospital","address1":"128 Hồng Bàng","address2":"Phường 12, Quận 5, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.755594417107266,"lng":106.6617600067459},"placeId":"ChIJcS-bNfAudTER-i6gyEOHIrE"},
+          {"title":"36care - Hệ thống tiêm chủng Vắc xin Thanh Hóa","address1":"Lô 60 MB530","address2":"Đông Vệ, Thành phố Thanh Hóa, Thanh Hoá, Vietnam","coords":{"lat":19.78231146059086,"lng":105.78237953558195},"placeId":"ChIJRY5BY99XNjER903qJxB3OKU"},
+          {"title":"Trung tâm tiêm chủng Vắc xin 36care Triệu Sơn","address1":"58 Phố Giắt","address2":"Minh Sơn, Triệu Sơn, Thanh Hoá 448740, Vietnam","coords":{"lat":19.819152143642075,"lng":105.60617432944775},"placeId":"ChIJewuAAGf7NjERscMQehDMOc8"},
+          {"title":"Trung tâm tiêm chủng Vắc xin 36care Thiệu Hóa","address1":"Lô 35","address2":"6 Tiểu khu 2, Thiệu Phú, Thiệu Hoá, Thanh Hoá 445600, Vietnam","coords":{"lat":19.89674043598856,"lng":105.67944337055226},"placeId":"ChIJy9fJZFzxNjER9-f4VuMy9JQ"},
+          {"title":"Trung tâm tiêm chủng Vắc xin36care Hoằng Hóa","address1":"290 ĐT510 Phú Vinh Đông","address2":"Hoằng Vinh, Hoằng Hoá, Thanh Hoá 442201, Vietnam","coords":{"lat":19.84382893852844,"lng":105.8523445932541},"placeId":"ChIJgxIAYO1ZNjERDHsPMb29NIU"},
+          {"title":"Trung tâm tiêm chủng Vắc xin 36care Nông Cống","address1":"Tiểu khu Lê Xá ( Đối diện Long Tơ Plaza","address2":"Lê Xá, Nông Cống, Thanh Hoá 450000, Vietnam","coords":{"lat":19.637493736830603,"lng":105.66083917368009},"placeId":"ChIJeY95t5v9NjERU9mtNsyMdDM"},
+          {"title":"Trung tâm tiêm chủng Vắc xin 36care Sầm Sơn","address1":"202 Đ. Lê Lợi","address2":"P. Bắc Sơn, Sầm Sơn, Thanh Hoá 450000, Vietnam","coords":{"lat":19.739212994468975,"lng":105.88848991165676},"placeId":"ChIJHf_ZERtRNjERLhXL0Ngcb50"},
+          {"title":"Trung Tâm Tiêm Chủng Vắc Xin 36 CARE","address1":"616 Đường Bà Triệu","address2":"Mỹ Lộc, Hậu Lộc, Thanh Hoá, Vietnam","coords":{"lat":19.913329517566883,"lng":105.88110251165676},"placeId":"ChIJY4y1IEr3NjERrD1uxjD7tLs"},
+          {"title":"PHÒNG KHÁM 400 SẢN PHỤ KHOA \u0026 KHHGĐ - CƠ SỞ 1","address1":"400 Hải Thượng Lãn Ông","address2":"xóm 9, Thành phố Thanh Hóa, Thanh Hoá, Vietnam","coords":{"lat":19.774246146517633,"lng":105.76912577055224},"placeId":"ChIJdaMKR2X4NjERhVdANjVU1cw"},
+          {"title":"PHÒNG KHÁM 400 SẢN PHỤ KHOA \u0026 KHHGĐ ( Cơ sở 2 )","address1":"440 Trần Phú","address2":"P. Lam Sơn, Thành phố Thanh Hóa, Thanh Hoá, Vietnam","coords":{"lat":19.800190053295108,"lng":105.77618222944776},"placeId":"ChIJDU-Sdwb4NjERZWopychVKsQ"},
+          {"title":"CDC Đồng Tháp","address1":"394 Lê Đại Hành","address2":"Phường Mỹ Phú, TP. Cao Lãnh, Đồng Tháp, Vietnam","coords":{"lat":10.46942007816677,"lng":105.64698276441803},"placeId":"ChIJe-ZlC05kCjER2M4e_bjUAc8"},
+          {"title":"Tam Tri Dong Thap General Hospital","address1":"700 QL30","address2":"Mỹ Tân, TP. Cao Lãnh, Đồng Tháp, Vietnam","coords":{"lat":10.475421160917513,"lng":105.6122163067459},"placeId":"ChIJgUGxpr9lCjERCy5sby0rPbU"},
+          {"title":"Trung Tâm Y Tế Thị Xã Hồng Ngự","address1":"R85R+63J","address2":"Đường Ngô Quyền, Phường An Thạnh, Hồng Ngự, Đồng Tháp, Vietnam","coords":{"lat":10.808097786571727,"lng":105.34013676441805},"placeId":"ChIJybvNMxg3CjERL_2YfEctR9I"},
+          {"title":"TTYT huyện Tháp Mười","address1":"GRCR+HQ3","address2":"Nguyễn Văn Cừ, TT. Mỹ An, Tháp Mười, Đồng Tháp, Vietnam","coords":{"lat":10.521408874479237,"lng":105.84189350674589},"placeId":"ChIJqSXldaWLCjEReBI6Vm0wgtA"},
+          {"title":"Bệnh viện Quốc Tế Phương Châu","address1":"153 Đ. Nguyễn Sinh Sắc","address2":"Phường 2, Sa Đéc, Đồng Tháp 873100, Vietnam","coords":{"lat":10.289342982471092,"lng":105.77041961165678},"placeId":"ChIJl_2gTCN-CjERTXmQmbmCHF4"},
+          {"title":"Trung tâm Y tế Tp. Sa Đéc","address1":"8Q34+QRW","address2":"Phường 1, Sa Đéc Province, Dong Thap, Vietnam","coords":{"lat":10.30448679092072,"lng":105.75707463558199},"placeId":"ChIJ96_qn3J-CjERJ77mkistQJw"},
+          {"title":"Trung tâm chẩn đoán y khoa - Phòng khám đa khoa hoàn hảo","address1":"456 Đ. Nguyễn Sinh Sắc","address2":"Phường 1, Sa Đéc, Đồng Tháp, Vietnam","coords":{"lat":10.290540979298354,"lng":105.76011271165677},"placeId":"ChIJdRB37dN_CjERhYWzr437eSk"},
+          {"title":"Bệnh viện đa khoa Triều An-Loan Trâm","address1":"Số 379C","address2":"ấp Tân Vĩnh Thuận, Tân Ngãi, Vĩnh Long, Vietnam","coords":{"lat":10.269875395436161,"lng":105.91867986441801},"placeId":"ChIJkdkc3KuDCjERY7a57V0h_Gc"},
+          {"title":"Bệnh Viện Xuyên Á - Cổng Cấp Cứu","address1":"7W6R+662","address2":"Phường 9, Vĩnh Long, Vietnam","coords":{"lat":10.260519897431989,"lng":105.94052986441805},"placeId":"ChIJ2U5GkSGDCjERKcaLAdJRgb0"},
+          {"title":"Trung Tâm Kiểm Soát Bệnh Tật Tỉnh Vĩnh Long","address1":"24 Hùng Vương","address2":"Phường 1, Vĩnh Long, 85106, Vietnam","coords":{"lat":10.252183170846145,"lng":105.97612426441806},"placeId":"ChIJb5G_dS6dCjERwqs6Th8ZJMM"},
+          {"title":"Trung tâm y tế thị xã Bình Minh","address1":"3RCF+HH2","address2":"QL1A, Thuận An, Bình Minh, Vĩnh Long, Vietnam","coords":{"lat":10.071400261316674,"lng":105.82387013558197},"placeId":"ChIJcx-veiF9oDERj93HlFPeqSw"},
+          {"title":"Tiêm chủng Vĩnh Long - Phòng khám Nhi đồng","address1":"57 Nguyễn Văn Thiệt","address2":"Phường 4, Vĩnh Long, Vietnam","coords":{"lat":10.246142823723522,"lng":105.97862711165676},"placeId":"ChIJaS0LIwudCjERYX33quKug_U"},
+          {"title":"Phòng tiêm chủng dịch vụ Hồng Phúc","address1":"69M6+CWH","address2":"Phường 7, Bến Tre, Vietnam","coords":{"lat":10.233571072312962,"lng":106.36236968834321},"placeId":"ChIJqacDLKupCjERyAbjasPiXS8"},
+          {"title":"Preventive Health Center District 12","address1":"495 D. Thị Mười","address2":"Hiệp Thành, Quận 12, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.874359797346148,"lng":106.63908939325408},"placeId":"ChIJNwvPB_UpdTERHdVBViJLcwA"},
+          {"title":"Dist. 10 Medical Center","address1":"403 Đ. Cách Mạng Tháng 8","address2":"Phường 13, Quận 10, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.780926934866914,"lng":106.67562353558198},"placeId":"ChIJCU3Yr9cudTER4k_f8Ocf-hM"},
+          {"title":"Trạm Y Tế Phường 1 Quận 10","address1":"73B Lý Thái Tổ","address2":"Phường 1, Quận 10, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.767151050526774,"lng":106.67581816441802},"placeId":"ChIJH--2I-AudTERZV6uRZVP9GU"},
+          {"title":"Trạm Y Tế Phường 2","address1":"42 Đ. Hùng Vương","address2":"Phường 2, Quận 10, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.761858046342804,"lng":106.67561056441802},"placeId":"ChIJs7zycuIudTERdDv1_PSCfgg"},
+          {"title":"Trạm y tế Phường 3 Quận 10","address1":"277 Ngô Gia Tự","address2":"Phường 3, Quận 10, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.76284948777709,"lng":106.67122332944776},"placeId":"ChIJ_WUxEWAvdTER5XKTSEBSw6g"},
+          {"title":"Trạm Y Tế Phường 4 Quận 10","address1":"262 Nguyễn Tri Phương","address2":"Phường 4, Quận 10, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.762088482205325,"lng":106.66860101165676},"placeId":"ChIJT3-ORuQudTERbL_SiLLfm1E"},
+          {"title":"Trung Tâm Y Tế Phường 5","address1":"32 Đ. Ng. Quyền","address2":"Phường 6, Quận 10, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.763314934223084,"lng":106.66442949694158},"placeId":"ChIJAwS9V-8udTERkhSwve72UOk"},
+          {"title":"Trạm Y Tế Phường 6 Quận 10","address1":"400 Đ. Nguyễn Chí Thanh","address2":"Phường 6, Quận 10, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.759402988526528,"lng":106.66533477055226},"placeId":"ChIJtd-QWuUudTERteq-K-VYODs"},
+          {"title":"Trung Tâm Y Tế Phường 7 Quận 10","address1":"91D Nguyễn Kim","address2":"Phường 7, Quận 10, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.760627435508662,"lng":106.66199432944777},"placeId":"ChIJzYseru8udTERfG5aN3ii6Ao"},
+          {"title":"Trạm Y Tế Phường 8 Quận 10","address1":"384 Bà Hạt","address2":"Phường 8, Quận 10, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.765686317500112,"lng":106.66737322944773},"placeId":"ChIJ8XZrWOYudTERYKGmehciFYc"},
+          {"title":"Trạm Y Tế Phường 9 Quận 10 HCM","address1":"445 Lý Thái Tổ","address2":"Phường 9, Quận 10, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.767942829455873,"lng":106.67263622944775},"placeId":"ChIJ_0RL0NYvdTER8VTcFqK1H1Y"},
+          {"title":"Trạm Y Tế Phường 11 Quận 10","address1":"192 Đ. Cao Thắng","address2":"Phường 11, Quận 10, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.773711128786061,"lng":106.6780271527613},"placeId":"ChIJbX3gyCAvdTERsRXRQ35S7wo"},
+          {"title":"Trạm Y Tế Phường 12 Quận 10","address1":"85 Đ. Hoà Hưng","address2":"Phường 12, Quận 10, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.779331788409653,"lng":106.67490152944777},"placeId":"ChIJwctuH9gudTER_DNjbpQGM0Q"},
+          {"title":"Ward 13 Dist. 10 Medical Center","address1":"463à","address2":"Đ. Cách Mạng Tháng 8, Phường 13, Quận 10, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.781615417890768,"lng":106.67440787055224},"placeId":"ChIJhz2dsNcudTER9Afk9ovQiiQ"},
+          {"title":"Trạm y tế phường 14","address1":"7A/5/4","address2":"Đ. Thành Thái, Phường 14, Quận 10, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.770063629811412,"lng":106.66172627055225},"placeId":"ChIJ2W9Bc7YvdTERGRPa5DJ5Qkk"},
+          {"title":"Trạm Y Tế Phường 15 Quận 10","address1":"64 Tô Hiến Thành","address2":"Phường 15, Quận 10, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.782158794268216,"lng":106.67101467055222},"placeId":"ChIJKXy1L9cudTER5H893X1xgcU"},
+          {"title":"TRUNG TÂM Y TẾ HUYỆN CỦ CHI","address1":"11 Đ. Vũ Duy Chí","address2":"TT. Củ Chi, Củ Chi, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.975958641142881,"lng":106.50201347055227},"placeId":"ChIJb8SyCZ0sCzERcPIAWP-w9KY"},
+          {"title":"Eastern People Military Hospital","address1":"50 Đ. Lê Văn Việt","address2":"Hiệp Phú, Quận 9, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.845956053565173,"lng":106.77848752944777},"placeId":"ChIJSYJ6OAwndTERh4mWtQpykaU"},
+          {"title":"Tam Tri Saigon General Hospital","address1":"171 Trường Chinh","address2":"Tân Thới Nhất, Hồ Chí Minh, Thành phố Hồ Chí Minh 71510, Vietnam","coords":{"lat":10.831737217442397,"lng":106.62184247055225},"placeId":"ChIJq7dtgXgldTERuEn5U9IkXUs"},
+          {"title":"Phòng khám Quốc tế Victoria Healthcare","address1":"37-39 Lương Định Của","address2":"P. Bình An, Quận 2, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.78623944701442,"lng":106.73126792944775},"placeId":"ChIJCR9clAoldTERUxEcKOVp-G0"},
+          {"title":"Phòng khám Quốc tế Victoria Healthcare","address1":"20-20Bis-22","address2":"Đinh Tiên Hoàng, Đa Kao, Quận 1, Thành phố Hồ Chí Minh 700000, Vietnam","coords":{"lat":10.788768011292056,"lng":106.69943702944775},"placeId":"ChIJY8awUzUvdTERs2lUFs2gpGI"},
+          {"title":"Phòng khám Quốc tế Victoria Healthcare","address1":"135A Nguyễn Văn Trỗi","address2":"Phường 12, Phú Nhuận, Thành phố Hồ Chí Minh 700000, Vietnam","coords":{"lat":10.794222610981327,"lng":106.67737724968546},"placeId":"ChIJW6e57NUodTERcYmvP_bwdaQ"},
+          {"title":"Phòng khám Quốc tế Victoria Healthcare","address1":"Sky Garden 1","address2":"1056 Đ. Nguyễn Văn Linh, Phú Mỹ Hưng, Quận 7, Thành phố Hồ Chí Minh 70000, Vietnam","coords":{"lat":10.729433470603436,"lng":106.70437171165678},"placeId":"ChIJTajIfMoodTERvZIHOjq3I-w"},
+          {"title":"Saigon Children\u0027s Clinic","address1":"21D Đoàn Hoàng Minh","address2":"P. Phú Khương, Bến Tre, Vietnam","coords":{"lat":10.240449882483833,"lng":106.36638831165676},"placeId":"ChIJ-VuVnImoCjERxFrod-z6fuI"},
+          {"title":"Pediatric polyclinics Nancy","address1":"615A Đ. Trần Hưng Đạo","address2":"Phường 1, Quận 5, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.756014547150409,"lng":106.68505934662704},"placeId":"ChIJQ-Cb3wQvdTERW_SlChPNYYE"},
+          {"title":"Ho Chi Minh City Pasteur Institute","address1":"167 Pasteur","address2":"Phường 8, Quận 3, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.78654362388674,"lng":106.68919028834321},"placeId":"ChIJa-E1cDIvdTER9UoGaMLWxPM"},
+          {"title":"Phòng Tiêm Chủng Vắc Xin Dịch Vụ Điện Bàn","address1":"595 Trần Thủ Độ","address2":"Điện Nam Trung, Điện Bàn, Quảng Nam, Vietnam","coords":{"lat":15.918879585371977,"lng":108.26467985950715},"placeId":"ChIJ7dr9KvQPQjERu6p0tKHmLQ4"},
+          {"title":"Phòng tiêm chủng vắc xin dịch vụ hội an","address1":"572 Cửa Đại","address2":"Cẩm Châu, Hội An, Quảng Nam, Vietnam","coords":{"lat":15.87945077445493,"lng":108.33653816441804},"placeId":"ChIJTczY4TUNQjERUODgTVb-8jQ"},
+          {"title":"Cơ sở tiêm chủng vắc xin dịch vụ I care","address1":"102 Điện Biên Phủ","address2":"Duy Phước, Duy Xuyên, Quảng Nam, Vietnam","coords":{"lat":15.843314856508016,"lng":108.28212701165673},"placeId":"ChIJMyawVXYPQjERl2pGl7PTgO0"},
+          {"title":"CƠ SỞ TIÊM CHỦNG VẮC XIN DỊCH VỤ ICARE 2 - Chi nhánh Điện Bàn","address1":"88 QL1A","address2":"Điện Thắng Bắc, Điện Bàn, Quảng Nam 51412, Vietnam","coords":{"lat":15.94333758356899,"lng":108.22214882944775},"placeId":"ChIJRy-gBZ8bQjERGkrtilytd88"},
+          {"title":"TRUNG TÂM TIÊM CHỦNG VẮC XIN UNICARE HỘI AN","address1":"115 Trần Hưng Đạo","address2":"Phường Minh An, Hội An, Quảng Nam 51300, Vietnam","coords":{"lat":15.879883631005905,"lng":108.32599177055222},"placeId":"ChIJzfNM47IPQjERImP5YYk9dlE"},
+          {"title":"Phòng tiêm chủng vắc xin Đại Lộc","address1":"18 Phạm Văn Đồng","address2":"TT. ái Nghĩa, Đại Lộc, Quảng Nam, Vietnam","coords":{"lat":15.880461537981507,"lng":108.11955122944777},"placeId":"ChIJe4rpS6QDQjERV4EMaLw2T9Y"},
+          {"title":"Phòng Tiêm chủng vắc xin Đà Nẵng","address1":"44 Nguyễn Hoàng","address2":"TT. Hà Lam, Thăng Bình, Quảng Nam, Vietnam","coords":{"lat":15.741727313323704,"lng":108.35956172944772},"placeId":"ChIJcePT32cLQjERHe7UKsMXwW4"},
+          {"title":"Phòng Tiêm Chủng Dịch Vụ QUẾ SƠN - Nha Khoa Đà Nẵng","address1":"23 Đỗ Quang","address2":"TT. ĐôngPhú, Quế Sơn, Quảng Nam, Vietnam","coords":{"lat":15.674129996510421,"lng":108.21757367729813},"placeId":"ChIJV3aqohn9aTER4WtwRSUxKyE"},
+          {"title":"Cơ Sở Tiêm Chủng Vắc Xin Kim Hương Núi Thành","address1":"Núi Thành","address2":"Núi Thành District, Quảng Nam, Vietnam","coords":{"lat":15.437509352321776,"lng":108.64034002944777},"placeId":"ChIJl4HQk7XIaTER7ym37Ydxd_A"},
+          {"title":"Phòng Tiêm Chủng Vắc Xin Dịch Vụ Núi Thành","address1":"397 Phạm Văn Đồng","address2":"TT. Núi Thành, Núi Thành, Quảng Nam, Vietnam","coords":{"lat":15.430944503252297,"lng":108.65657547055224},"placeId":"ChIJ1SQY-tDIaTERb-fAFAwJG1U"},
+          {"title":"Trung tâm tiêm chủng BenKin - BKVC","address1":"680 Âu Cơ","address2":"Hoà Liên, Liên Chiểu, Đà Nẵng, Vietnam","coords":{"lat":16.07730281216755,"lng":108.11741527055224},"placeId":"ChIJoRR-bKYfQjER0WRYRQc6FXc"},
+          {"title":"Trung tâm tiêm chủng Danavac","address1":"11 Đ. Lê Duẩn","address2":"Hải Châu 1, Hải Châu, Đà Nẵng 550000, Vietnam","coords":{"lat":16.07145606108628,"lng":108.22236827055224},"placeId":"ChIJdShaEYgZQjERbvcA81d5yqM"},
+          {"title":"CDC Đà Nẵng","address1":"118 Lê Đình Lý","address2":"Hòa Thuận Đông, Hải Châu, Đà Nẵng 550000, Vietnam","coords":{"lat":16.054230542634475,"lng":108.21158312944772},"placeId":"ChIJv6E1mi4ZQjERov4fUFvk6Fc"},
+          {"title":"Da Nang Hospital for Women and Children","address1":"402 Đ. Lê Văn Hiến","address2":"Khuê Mỹ, Ngũ Hành Sơn, Đà Nẵng, Vietnam","coords":{"lat":16.022939616104193,"lng":108.24976854110449},"placeId":"ChIJE-bR_FEXQjEREY13KceFpzI"},
+          {"title":"Health Center District 9","address1":"48A Đường Tăng Nhơn Phú","address2":"Tăng Nhơn Phú B, Quận 9, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.833313253259982,"lng":106.77971482944773},"placeId":"ChIJjYQmfAMndTERfkWFGjVuPJ4"},
+          {"title":"Trung Tâm Y Tế Huyện Bình Chánh","address1":"100 Đường Tân Túc","address2":"TT. Tân Túc, Bình Chánh, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.692181757436865,"lng":106.58455406441803},"placeId":"ChIJz339d2EydTER5b5JM1OALE0"},
+          {"title":"Le Van Thinh Hospital","address1":"130 Đường Lê Văn Thịnh","address2":"Phường Bình Trưng Tây, Quận 2, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.782764264324912,"lng":106.76919717055226},"placeId":"ChIJu3pN-9QldTERUXQEil9mBu0"},
+          {"title":"Trung Tâm Y Tế Dự Phòng Q11","address1":"72 Đường Số 5 - Cư xá Bình Thới","address2":"Phường 8, Quận 11, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.76055925889358,"lng":106.64778997055227},"placeId":"ChIJyXpQiMMvdTERYzX8Z5lokE8"},
+          {"title":"Bệnh viện quận 11","address1":"Phường 8","address2":"Quận 11, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.760568170817898,"lng":106.64812187055223},"placeId":"ChIJO0Np2ZAvdTERsOV1g8Fx1Zs"},
+          {"title":"Pasteur Institute Nha Trang","address1":"8 Trần Phú","address2":"Xương Huân, Nha Trang, Khánh Hòa 650000, Vietnam","coords":{"lat":12.252298636180303,"lng":109.19568677055227},"placeId":"ChIJtSOOcYRncDERGUPCnxClmDM"},
+          {"title":"Tam Tri Nha Trang General Hospital","address1":"57-59 Cao Thắng","address2":"Phước Trung, Nha Trang, Khánh Hòa, Vietnam","coords":{"lat":12.212804067506392,"lng":109.19524827055228},"placeId":"ChIJCwbbvFBncDERPyyIyw93CZs"},
+          {"title":"Khanh Hoa general hospital","address1":"19 Yersin","address2":"Lộc Thọ, Nha Trang, Khánh Hòa 650000, Vietnam","coords":{"lat":12.248458098978517,"lng":109.19192151165676},"placeId":"ChIJ-b83U4BncDERM9R-Jv1yHcY"},
+          {"title":"Sai Gon Nha Trang General Hospital","address1":"Lô 10 đường","address2":"19 Tháng 5, Vĩnh Hiệp, Nha Trang, Khánh Hòa 650000, Vietnam","coords":{"lat":12.257955830424539,"lng":109.16899277055224},"placeId":"ChIJnfX-9nFdcDERGeWvtnsiTC8"},
+          {"title":"Công Ty Tnhh Đầu Tư Vk Medical","address1":"37 Đ. A2","address2":"Phước Hải, Nha Trang, Khánh Hòa 57000, Vietnam","coords":{"lat":12.237600182972962,"lng":109.17661121165676},"placeId":"ChIJ5X88T4VdcDERdWg2DqIomxs"},
+          {"title":"Phòng Tiêm Chủng Vắc Xin Dịch Vụ VCN","address1":"58 đường A1","address2":"KĐT, Vĩnh Điềm Trung, Nha Trang, Khánh Hòa 650000, Vietnam","coords":{"lat":12.257254070756803,"lng":109.16704890485879},"placeId":"ChIJDRSd5XVdcDERSdoaDpEYTNo"},
+          {"title":"Trung tâm tiêm chủng TNT Ninh Hoà","address1":"543 Trần Quý Cáp","address2":"TT. Ninh Hòa, Ninh Hòa, Khánh Hòa, Vietnam","coords":{"lat":12.486028467524752,"lng":109.12764569938832},"placeId":"ChIJFVzy8aU_cDERyL9qGchwtXw"},
+          {"title":"Trung tâm Tiêm chủng TNT Cam Ranh","address1":"82 đường Hai Mươi Hai Tháng Tám","address2":"Cam Thuận, Cam Ranh, Khánh Hòa 57800, Vietnam","coords":{"lat":11.913346976979538,"lng":109.15017681165679},"placeId":"ChIJs1JPWbztcDERdWzYV5kCZiU"},
+          {"title":"Trung tâm tiêm chủng 304 HÙNG VƯƠNG - PHÚ YÊN","address1":"304 ĐL Hùng Vương","address2":"Phường7, Tuy Hòa, Phú Yên, Vietnam","coords":{"lat":13.097179322605102,"lng":109.31165311165677},"placeId":"ChIJDYJ01vftbzER5WAwZlrysyU"},
+          {"title":"Phòng Tiêm Chủng Vắc Xin Dịch Vụ Diên Khánh","address1":"7 Lạc Long Quân","address2":"Diên Khánh, Khánh Hòa, Vietnam","coords":{"lat":12.256809729426074,"lng":109.10660301165674},"placeId":"ChIJpeWS8ypdcDERontOPtphTcQ"},
+          {"title":"Tiêm Chủng Thiên Phúc","address1":"21 Nguyễn Thị Ngọc Oanh","address2":"TT. Ninh Hòa, Ninh Hòa, Khánh Hòa, Vietnam","coords":{"lat":12.490649800559806,"lng":109.12679592944774},"placeId":"ChIJ3cOzOx8_cDERzaXL2QWXUfU"},
+          {"title":"Trung tâm tiêm chủng Family Care Phú Yên","address1":"249 ĐL Hùng Vương","address2":"Phường 9, Tuy Hòa, Phú Yên, Vietnam","coords":{"lat":13.102564157600794,"lng":109.30769452270185},"placeId":"ChIJcxjIHKPtbzERNXMnHz60Ga8"},
+          {"title":"Phòng Khám Tư Vấn Và Điều Trị Dự Phòng","address1":"67 Nguyễn Thái Học","address2":"Phường 2, Tuy Hòa, Phú Yên, Vietnam","coords":{"lat":13.089343559390116,"lng":109.30307521165673},"placeId":"ChIJvanpOhTsbzERvRf5MOYUxpc"},
+          {"title":"Phòng Tiêm Chủng Vắc Xin Tâm An","address1":"1 Đường Mậu Thân","address2":"Phường 5, Tuy Hòa, Phú Yên, Vietnam","coords":{"lat":13.093579079501888,"lng":109.31002887055223},"placeId":"ChIJZYuXvm_tbzERwgtLro_FJEE"},
+          {"title":"Phòng tiêm chủng","address1":"86 Nguyễn Trãi","address2":"Phường 5, Tuy Hòa, Phú Yên, Vietnam","coords":{"lat":13.090073824615196,"lng":109.30582567055225},"placeId":"ChIJEzgPSx7tbzERb42d0BFmlDY"},
+          {"title":"Phòng tiêm chủng vắc xin dịch vụ 03","address1":"X6WX+R74","address2":"QL29, Hoà Bình 2, Tây Hòa, Phú Yên, Vietnam","coords":{"lat":12.997000444057557,"lng":109.24820782944776},"placeId":"ChIJ4_VTzhDpbzERW2y2jcD86r4"},
+          {"title":"Trung tâm tiêm chủng Family Care Phú Yên","address1":"249 ĐL Hùng Vương","address2":"Phường 9, Tuy Hòa, Phú Yên, Vietnam","coords":{"lat":13.102565382153875,"lng":109.30769318159734},"placeId":"ChIJcxjIHKPtbzERNXMnHz60Ga8"},
+          {"title":"PHÒNG TIÊM NGỪA VẮC XIN PHAN RANG","address1":"HXMR+379","address2":"Đài Sơn, Phan Rang-Tháp Chàm, Ninh Thuận, Vietnam","coords":{"lat":11.58266347478501,"lng":108.99072532944773},"placeId":"ChIJrbjbddbRcDERKoX2WYX7WdY"},
+          {"title":"FV Hospital","address1":"6 Nguyễn Lương Bằng","address2":"Tân Phú, Quận 7, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.732494005896223,"lng":106.71801216441804},"placeId":"ChIJJeoQtogvdTERC5kIIDyUWrc"},
+          {"title":"Quoc Anh General Hospital","address1":"104","address2":"110 Đường số 54, Tân Tạo, Bình Tân, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.753581317752863,"lng":106.59325442944774},"placeId":"ChIJZ2SNj1IsdTERa-C2PMMKDY0"},
+          {"title":"City International Hospital","address1":"3 Đường Số 17A","address2":"Bình Trị Đông B, Bình Tân, Thành phố Hồ Chí Minh 700000, Vietnam","coords":{"lat":10.74095427690886,"lng":106.60912953558196},"placeId":"ChIJu1rj78gtdTERtctE3ocYOtY"},
+          {"title":"TRUNG TÂM Y TẾ HUYỆN NHÀ BÈ","address1":"1 Đường số 18","address2":"Ấp 1, Nhà Bè, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.676830237814178,"lng":106.735433564418},"placeId":"ChIJ-yL8QYEodTERXIN_yp5URZk"},
+          {"title":"Preventive Health Center, District 7","address1":"101 Nguyễn Thị Thập","address2":"Tân Phú, Quận 7, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.737492823552513,"lng":106.72351187055226},"placeId":"ChIJDQAb9n0ldTER42XxiiIsp34"},
+          {"title":"Tan Binh District Medical Center","address1":"12 Tân Hải","address2":"Phường 13, Tân Bình, Thành phố Hồ Chí Minh, Vietnam","coords":{"lat":10.800626188010343,"lng":106.63993952944773},"placeId":"ChIJaXEmzlEpdTER0_fE2Nty2y0"},
+          {"title":"Nhi Đồng 315 và Tiêm Chủng","address1":"37 Huỳnh Tấn Phát","address2":"TT. Nhà Bè, Nhà Bè, Thành phố Hồ Chí Minh 70000, Vietnam","coords":{"lat":10.70164571770906,"lng":106.73835617055222},"placeId":"ChIJoynZZ_Q7dTERc7CvtbQM73c"},
+          {"title":"CDC Can Tho","address1":"1 Ngô Đức Kế","address2":"Tân An, Ninh Kiều, Cần Thơ, Vietnam","coords":{"lat":10.029713988832565,"lng":105.78727121840268},"placeId":"ChIJuYS1K59ioDER-zVRT4X-zTI"},
+          {"title":"Phuong Chau International Hospital","address1":"300 Nguyễn Văn Cừ nối dài","address2":"Phường An Khánh, Ninh Kiều, Cần Thơ 902490, Vietnam","coords":{"lat":10.029953234976611,"lng":105.75094497055227},"placeId":"ChIJz_kz3USIoDEReAMV1nOqb84"},
+          {"title":"Hoan My Cuu Long Hospital","address1":"Lô 20 Võ Nguyên Giáp","address2":"Phú Thứ, Cái Răng, Cần Thơ, Vietnam","coords":{"lat":10.005284009468541,"lng":105.79915525889548},"placeId":"ChIJkVvqaieIoDERdlN8YgmMoRM"},
+          {"title":"Thanh Vu Hospital Medic Bac Lieu","address1":"8P67+GX6","address2":"Phường 7, Bạc Liêu, Vietnam","coords":{"lat":9.311286939443326,"lng":105.71488866441804},"placeId":"ChIJb8HYcBcJoTER12leHhoS224"},
+          {"title":"Trung Tâm Y Tế Thành Phố Bạc Liêu","address1":"Đường Số 9","address2":"Phường 5, Bạc Liêu, Vietnam","coords":{"lat":9.273697844445177,"lng":105.73212803252352},"placeId":"ChIJzQGugtMLoTERJtRURkjJIcA"},
+          {"title":"Phòng Khám Đa Khoa Nhân Hòa","address1":"Số 79 - F7","address2":"Trần Phú, Phường 7, Bạc Liêu, Vietnam","coords":{"lat":9.289017186962228,"lng":105.72170452944778},"placeId":"ChIJ-WZQFmUJoTEReye4pmh5cq4"},
+          {"title":"Bac Lieu Province General Hospital","address1":"6 Nguyễn Huệ","address2":"Phường 3, Bạc Liêu, Vietnam","coords":{"lat":9.283906417550682,"lng":105.71999213558195},"placeId":"ChIJuS1bnmMJoTERjU1tCG18ykY"},
+          {"title":"TT KSBT Bạc Liêu","address1":"Số 1 l","address2":"Đồng Khởi, Phường 5, Bạc Liêu, Vietnam","coords":{"lat":9.281619472652013,"lng":105.73334418834321},"placeId":"ChIJacu6nB8JoTERMcjMOnkXHEc"},
+          {"title":"Viện Kiểm Định Quốc Gia Vắc Xin \u0026 Sinh Phẩm Y Tế","address1":"Nghiêm Xuân Yêm","address2":"Đại Kim, Hoàng Mai, Hà Nội, Vietnam","coords":{"lat":20.97216046042227,"lng":105.82202797055224},"placeId":"ChIJr3V_atcJNTERWxrSkumuA5k"},
+          {"title":"Agriculture General Hospital","address1":"WVC3+G6V","address2":"QL1A, Ngọc Hồi, Thanh Trì, Hà Nội, Vietnam","coords":{"lat":20.921266733400593,"lng":105.8533496588955},"placeId":"ChIJq7SsQ_OtNTERJdZUgUVzzO0"},
+          {"title":"Hanoi French Hospital","address1":"Số 1 Phương Mai","address2":"Đống Đa, Hà Nội 100000, Vietnam","coords":{"lat":21.003719517501438,"lng":105.84035332944775},"placeId":"ChIJ0eR74XmsNTERtumOeSyIXcE"},
+          {"title":"Thu Cúc TCI Trần Duy Hưng","address1":"216 Đ. Trần Duy Hưng","address2":"Trung Hoà, Cầu Giấy, Hà Nội 100000, Vietnam","coords":{"lat":21.008287065411807,"lng":105.79570057055224},"placeId":"ChIJHXdslgmtNTERwPSpHJAqRbc"},
+          {"title":"National Hospital Of Tropical Diseases","address1":"78 Giải Phóng","address2":"Phương Đình, Đống Đa, Hà Nội, Vietnam","coords":{"lat":21.002145965247955,"lng":105.83893947055223},"placeId":"ChIJ_bWXJHqsNTER_ueWQQd7KAk"},
+          {"title":"Bệnh Viện Nhiệt Đới TW CS2","address1":"Kim Chung","address2":"Đông Anh, Hanoi, Vietnam","coords":{"lat":21.13145909598082,"lng":105.77435183334347},"placeId":"ChIJk2LqnOf_NDERjhE7of4nCLo"},
+          {"title":"Trung tâm tiêm ᴄhủng Fivevac Ngọc Hồi","address1":"Km 13 Đ. Ngọc Hồi","address2":"Ngọc Hồi, Thanh Trì, Hà Nội 100000, Vietnam","coords":{"lat":20.92374271316687,"lng":105.85165507055228},"placeId":"ChIJa5irOPatNTERNjuOCDatBKs"},
+          {"title":"Trung tâm tiêm chủng Fivevac Bắc Từ Liêm","address1":"Số C38","address2":"TT A2, Đường 23, Phường, Khu đô thị Thành phố Giao lưu, Bắc Từ Liêm, Hà Nội 100000, Vietnam","coords":{"lat":21.055089960888555,"lng":105.77646797055222},"placeId":"ChIJPc71fa2tNTERPKR1uRPl0D8"},
+          {"title":"Điểm tiêm chủng bệnh viện đa khoa Hà Đông","address1":"2c P. Nguyễn Viết Xuân","address2":"P. Quang Trung, Hà Đông, Hà Nội, Vietnam","coords":{"lat":20.970804487505262,"lng":105.77350179325408},"placeId":"ChIJw6yV_8VTNDERzdPgybti_40"},
+          {"title":"Phòng tiêm chủng - tư vấn dinh dưỡng","address1":"35 P. Lê Văn Thiêm","address2":"Thanh Xuân Trung, Thanh Xuân, Hà Nội, Vietnam","coords":{"lat":20.999916908637022,"lng":105.80427562944776},"placeId":"ChIJWT6hcw2tNTERcEy4v_zhV-U"},
+          {"title":"Phòng tiêm chủng Đại học Y Hà Nội cơ sở 1","address1":"Số 1 P. Tôn Thất Tùng","address2":"Kim Liên, Đống Đa, Hà Nội, Vietnam","coords":{"lat":21.003658456499785,"lng":105.83186957055223},"placeId":"ChIJ-_Mdf36sNTERNre2a0pY2IE"},
+          {"title":"PHÒNG TIÊM CHỦNG VẮC XIN DỊCH VỤ TRÀNG AN - QUẾ VÕ","address1":"5533+4WP","address2":"TT. Phố Mới, Quế Võ, Bắc Ninh, Vietnam","coords":{"lat":21.152828453828977,"lng":106.15482907055228},"placeId":"ChIJ_RdTIXcLNTERdx6EbVISVVY"},
+          {"title":"Immunization room Tràng An","address1":"Tòa nhà Vinh Quang Group","address2":"Khu đô thị Tây Nam Linh Đàm, Hoàng Mai, Hà Nội, Vietnam","coords":{"lat":20.962958856780272,"lng":105.82433211165676},"placeId":"ChIJWxDWGQGtNTER69lQs9WTEig"},
+          {"title":"Tiêm chủng Tràng An Gia Lâm","address1":"S2.07 01 SH 05 Vinhomes Ocean Park","address2":"Đa Tốn, Gia Lâm, Hà Nội 100000, Vietnam","coords":{"lat":20.993892952147526,"lng":105.94103882944776},"placeId":"ChIJD4S4gK6rNTERnd-FhkTuaVU"},
+          {"title":"Phòng tiêm Tràng An","address1":"Tòa B2.1 HH03F","address2":"Chung cư, Cự Khê, Thanh Oai, Hà Nội, Vietnam","coords":{"lat":20.931115952605836,"lng":105.78393567055227},"placeId":"ChIJIxdNfbKtNTER63W0ZKbFqz8"},
+          {"title":"Trung tâm Vắcxin Hà Nội","address1":"160 P. Tôn Đức Thắng","address2":"Hàng Bột, Đống Đa, Hà Nội, Vietnam","coords":{"lat":21.025150396108415,"lng":105.83265351165674},"placeId":"ChIJR5fNNZyrNTERlquRTfU-AoE"},
+          {"title":"Trung tâm kiểm soát bệnh tật tỉnh Phú Thọ","address1":"Ngõ 13 Trần Phú","address2":"Ph.Gia Cẩm, Thành phố Việt Trì, Phú Thọ, Vietnam","coords":{"lat":21.319104567327894,"lng":105.39882726441805},"placeId":"ChIJ_T_190KNNDERP_86EiwxjEE"},
+          {"title":"Bệnh viện Sản Nhi tỉnh Phú Thọ","address1":"Nông Trang","address2":"Thành phố Việt Trì, Phú Thọ 35120, Vietnam","coords":{"lat":21.33478059678871,"lng":105.38359137055227},"placeId":"ChIJudfOVJ-SNDERS5xTK8T-Lw0"},
+          {"title":"Phòng tiêm chủng vắc xin Hương lý","address1":"653G+463","address2":"QL32, TT. Thanh Sơn, Thanh Sơn, Phú Thọ, Vietnam","coords":{"lat":21.202827960989953,"lng":105.17556765706044},"placeId":"ChIJizRZWwqHNDER1hKE3_m5Iy0"},
+          {"title":"Phòng khám đa khoa khu vực Mạo khê","address1":"3J42+X6P","address2":"TT. Mạo Khê, Đông Triều District, Quảng Ninh, Vietnam","coords":{"lat":21.057449185373798,"lng":106.60059132944777},"placeId":"ChIJWQTeOOmASjERYsrnSk3wWTs"},
+          {"title":"toantamclinic","address1":"Khu Đô thị Tân Việt Bắc - Tổ 2 khu","address2":"Hoàng Hoa Thám, Phường, tx. Đông Triều, Quảng Ninh 02411, Vietnam","coords":{"lat":21.05405048796724,"lng":106.59793784723873},"placeId":"ChIJIUxy6TeBSjERqxQvQrOd44E"},
+          {"title":"Phòng Khám Đa Khoa Kinh Bắc","address1":"Số 12","address2":"Tổ 8 Khu, Hoàng Hoa Thám, Phường, tx. Đông Triều, Quảng Ninh, Vietnam","coords":{"lat":21.056780000472163,"lng":106.60261096441806},"placeId":"ChIJ96a6mwSBSjERn2fYExa9D1E"},
+          {"title":"Phòng tiêm chủng vắcxin Happy","address1":"166 Trần Nhân Tông","address2":"Yên Thanh, Uông Bí, Quảng Ninh 02300, Vietnam","coords":{"lat":21.033632835316773,"lng":106.76100127055227},"placeId":"ChIJaVJJMq2JSjERv57kDyyB3HI"},
+          {"title":"Trung tâm tiêm chủng vắc xin dịch vụ Đức Mnhi","address1":"Khu Cầu Di Linh","address2":"An Đức, Ninh Giang, Hải Dương, Vietnam","coords":{"lat":20.76552857983514,"lng":106.28656922944775},"placeId":"ChIJ_41ZJpOTNTERR5WWz82BzZE"},
+          {"title":"Vietnam - Sweden Hospital","address1":"2QR2+MR3","address2":"Tuệ Tĩnh, Thanh Sơn, Uông Bí, Quảng Ninh, Vietnam","coords":{"lat":21.04165083804831,"lng":106.75204217055224},"placeId":"ChIJoQk67EOISjERG4UXYrHnZxQ"},
+          {"title":"Trung Tâm Tiêm Chủng Vắc Xin Quảng Yên","address1":"89 Quang Trung","address2":"TT. Quảng Yên, Yên Hưng, Quảng Ninh, Vietnam","coords":{"lat":20.941048482576,"lng":106.80037782944771},"placeId":"ChIJF3yDJSZjSjERZf0BVhkpP7U"},
+          {"title":"Trung Tâm Tiêm Chủng Vắcxin Chất Lượng Cao Quảng Ninh","address1":"67 Nguyễn Bình","address2":"Cộng Hoà, Yên Hưng, Quảng Ninh, Vietnam","coords":{"lat":20.939306230298506,"lng":106.81212968834325},"placeId":"ChIJ7YQqft5jSjER_MquNADTdAE"},
+          {"title":"Bệnh viện Đa khoa Quốc tế Vinmec Hạ Long","address1":"10A Lê Thánh Tông","address2":"Hồng Gai, Thành phố Hạ Long, Quảng Ninh, Vietnam","coords":{"lat":20.95192240528008,"lng":107.07198410674593},"placeId":"ChIJRxTJYEFYSjER5FU9bNXiPmM"},
+          {"title":"Phòng khám đa khoa Quốc tế The Medcare Quảng Ninh","address1":"Tầng 3","address2":"tòa nhà Goldland Plaza, Số 536 Nguyễn Văn Cừ, Hồng Hải, Thành phố Hạ Long, Quảng Ninh 01110, Vietnam","coords":{"lat":20.946264125800827,"lng":107.10842097055226},"placeId":"ChIJe9EOObtXSjER1uumrsrAPsg"},
+          {"title":"Trung Tâm Y Tế Dự Phòng Tỉnh Quảng Ninh","address1":"651 Lê Thánh Tông","address2":"P. Bạch Đằng, Thành phố Hạ Long, Quảng Ninh, Vietnam","coords":{"lat":20.95234332603132,"lng":107.08875217055227},"placeId":"ChIJE5IpMD1YSjERGHsQ5FnZnhI"},
+          {"title":"Tam Phuc Maternity Hospital","address1":"10 Hồ Sen","address2":"Trại Cau, Lê Chân, Hải Phòng, Vietnam","coords":{"lat":20.849153920065156,"lng":106.68100791165678},"placeId":"ChIJhzFkI4l6SjERjvhrAEGdfBU"},
+          {"title":"Bệnh viện Hữu nghị Việt Tiệp","address1":"số 1 Nhà Thương","address2":"Cát Dài, Lê Chân, Hải Phòng, Vietnam","coords":{"lat":20.852244527415703,"lng":106.67141768834321},"placeId":"ChIJoSQnX2F6SjERGM9twz-iyig"},
+          {"title":"Phòng khám sản phụ khoa + Tiêm chủng vắc xin","address1":"76 Cầu Đen","address2":"TT. Núi Đôi, Kiến Thụy, Hải Phòng, Vietnam","coords":{"lat":20.756421267560423,"lng":106.67289881165676},"placeId":"ChIJB5oPMlVxSjER6gyjiTMoebw"},
+          {"title":"Tiêm Chủng Quỳnh Trang - Kiến Thụy","address1":"95 Cầu Đen","address2":"TT. Núi Đôi, Kiến Thụy, Hải Phòng, Vietnam","coords":{"lat":20.755825122980635,"lng":106.67259387055223},"placeId":"ChIJk7s0WnNxSjERGNM4RQQDH9o"},
+          {"title":"Trung tâm Tiêm chủng Vắc xin Hoàng Thành","address1":"52 Trần Tất Văn","address2":"Phù Liễn, Kiến An, Hải Phòng 04000, Vietnam","coords":{"lat":20.802065416448905,"lng":106.62500197055223},"placeId":"ChIJ3eQpTI53SjER_uly15MgAqw"},
+          {"title":"Tiêm Chủng Vắc Xin Quỳnh Trang","address1":"86 Trần Tất Văn","address2":"Phù Liễn, Kiến An, Hải Phòng, Vietnam","coords":{"lat":20.80146296384637,"lng":106.62475687055226},"placeId":"ChIJM6SY4wV3SjERsCHjFIXjtJ4"},
+          {"title":"Phòng tiêm chủng Vắc Xin Bình Minh","address1":"Tân Tiến","address2":"An Dương, Hai Phong, Vietnam","coords":{"lat":20.890890465073408,"lng":106.59831302944774},"placeId":"ChIJ_QtaNxJ5SjERIABylOOnjwg"},
+          {"title":"Phòng khám tư vấn và điều trị dự phòng An Phúc","address1":"Số Nhà 8 khu liền kề","address2":"lô 3, khu đô thị Hoàng Huy Pruska, đường Máng nước, Cát Dài, An Dương, Hải Phòng, Vietnam","coords":{"lat":20.853208932073077,"lng":106.66856381595592},"placeId":"ChIJFTBwN8t7SjERBQPWlM_t7y0"},
+          {"title":"Bệnh Viện Đa Khoa Quốc Tế Hải Phòng- Vĩnh Bảo","address1":"QL. 10","address2":"Số 12, Phố Tân Hòa, TT. Vĩnh Bảo, Vĩnh Bảo, Hải Phòng, Vietnam","coords":{"lat":20.684252522981552,"lng":106.48139402944776},"placeId":"ChIJaQ7_ZJOLNTERs_9eTVivIWc"},
+          {"title":"Phòng tiêm vắc xin Hoàng Phong","address1":"Đường 20-8","address2":"TT. Vĩnh Bảo, Vĩnh Bảo, Hải Phòng, Vietnam","coords":{"lat":20.688671106171164,"lng":106.48082997055225},"placeId":"ChIJK2LNLzaLNTERTRSMGD7WSE0"},
+          {"title":"Phòng tiêm Vắc Xin Nutivac An Lão","address1":"254 Ngô Quyền","address2":"TT. An Lão, An Lão, Hải Phòng, Vietnam","coords":{"lat":20.82016116984096,"lng":106.54722437055226},"placeId":"ChIJK4ARQ8x3SjERKIrWJD7GUVY"},
+          {"title":"Trung Tâm Y Tế Huyện Tiên Lãng","address1":"Thị Trấn Tiên Lãng","address2":"Huyện Tiên Lãng, Thành Phố Hải Phòng, PHC4+94W, TT. Tiên Lãng, Tiên Lãng, Hải Phòng, Vietnam","coords":{"lat":20.72100037665176,"lng":106.55534389325409},"placeId":"ChIJX-LFCpd1SjERGIshPmbrUEg"},
+          {"title":"Phòng Tiêm Vắc Xin Dịch Vụ Sao Mai","address1":"22 Lê Lợi","address2":"TT. An Lão, An Lão, Hải Phòng 04000, Vietnam","coords":{"lat":20.82245121020127,"lng":106.55875052944775},"placeId":"ChIJa8W893x3SjERBitWDh-JTfc"},
+          {"title":"Phòng Tiêm Chủng Nutivac An Dương","address1":"Số 5-6 Bờ Hồ Rế","address2":"ổ Dân Phố Số 3 Thị Trấn An Dương, TT. An Dương, An Dương, Hải Phòng 184800, Vietnam","coords":{"lat":20.8656473510425,"lng":106.61137575276125},"placeId":"ChIJNfG5yth5SjERgI2-FskXrBY"},
+          {"title":"Bệnh viện Quốc tế Sản Nhi Hải Phòng","address1":"124 P. Nguyễn Đức Cảnh","address2":"Cát Dài, Lê Chân, Hải Phòng, Vietnam","coords":{"lat":20.85412459691062,"lng":106.67241364110451},"placeId":"ChIJz8DGvPt7SjERH_ZoaI4lzz0"},
+          {"title":"Bệnh viện Quốc tế Green","address1":"738 Nguyễn Văn Linh","address2":"Niệm Nghĩa, Lê Chân, Hải Phòng, Vietnam","coords":{"lat":20.842116866458852,"lng":106.662468364418},"placeId":"ChIJczDw1Gx6SjERuRR37Iu-uck"},
+          {"title":"Bệnh viện Trẻ em Hải Phòng","address1":"RMJ6+HC3","address2":"Việt Đức, Kiến An, Hải Phòng, Vietnam","coords":{"lat":20.83141315500355,"lng":106.66103686441804},"placeId":"ChIJqzNTYJxwSjER4_At-qZ_rHQ"},
+          {"title":"Vinmec Hai Phong International hospital","address1":"Đường Võ Nguyên Giáp","address2":"Vĩnh Khiệm, Lê Chân, Hải Phòng, Vietnam","coords":{"lat":20.82305087960877,"lng":106.68741486441802},"placeId":"ChIJb3LBDHBwSjERGRz_7dNEYO0"},
+          {"title":"Phòng khám nhi khoa quốc tế The Medcare Hải Phòng","address1":"Tòa nhà DK","address2":"số 2 Lô 22A, Lê Hồng Phong, Đông Khê, Ngô Quyền, Hải Phòng, Vietnam","coords":{"lat":20.84951734173928,"lng":106.70477902944775},"placeId":"ChIJZXowo756SjERpzv99EFVJp0"},
+          {"title":"Trung tâm Y tế dự phòng","address1":"21D P. Lê Đại Hành","address2":"Hoàng Văn Thụ, Hồng Bàng, Hải Phòng, Vietnam","coords":{"lat":20.860887642619147,"lng":106.68398372944776},"placeId":"ChIJieeClfN6SjERUoYX_va8e4E"},
+          {"title":"Trung tâm tiêm chủng vắc xin Hải Phòng","address1":"RMMC+FMM","address2":"Vĩnh Niệm, Lê Chân, Hai Phong, Vietnam","coords":{"lat":20.833714146581517,"lng":106.67169226441804},"placeId":"ChIJ0ZCUPqRxSjERvjpfNEsFs0o"},
+          {"title":"I-VAC Trung Tâm Tiêm Chủng Imperia - Hải Phòng","address1":"BH 06-36","address2":"khu đô thị Vinhomes Imperia, Hồng Bàng, Hải Phòng, Vietnam","coords":{"lat":20.866558287448893,"lng":106.66298109141903},"placeId":"ChIJdSXqqDR7SjER2KsptY-4Bx8"},
+          {"title":"Phòng Khám Tư Vấn Và Điều Trị Dự Phòng Bạch Đằng","address1":"WM9J+W59","address2":"Trần Hưng Đạo, TT. Núi Đèo, Thủy Nguyên, Hải Phòng, Vietnam","coords":{"lat":20.919790591468917,"lng":106.68047728834324},"placeId":"ChIJK-4UOXl7SjER_axZbf-VzOA"},
+          {"title":"Trung tâm tiêm chủng vắc xin Bạch Đằng","address1":"WM3F+H5V","address2":"ĐT359, Tân Dương, Thủy Nguyên, Hải Phòng, Vietnam","coords":{"lat":20.90382513348331,"lng":106.672969544792},"placeId":"ChIJq_EK60N7SjERkn5wVcjnQtY"},
+          {"title":"Trung Tâm Y Tế Huyện Thanh Oai","address1":"tt. Kim Bài","address2":"Thanh Oai, Hanoi, Vietnam","coords":{"lat":20.863847280373243,"lng":105.75949701165675},"placeId":"ChIJq6qqqtpMNDERh5aB7FB-SpA"},
+          {"title":"Phòng tiêm chủng dịch vụ Sunny Care","address1":"Lô 39","address2":"DV2, Khu CEO, Sài Sơn, Quốc Oai, Hà Nội, Vietnam","coords":{"lat":21.01401225243089,"lng":105.6490209760748},"placeId":"ChIJb1bn2hNRNDER63oqCnE1FkQ"},
+          {"title":"PHÒNG TIÊM VACXIN FAMILY","address1":"Khu liền kề","address2":"Nguyễn Tất Thành, Định Trung, Vĩnh Yên, Vĩnh Phúc, Vietnam","coords":{"lat":21.32075398492851,"lng":105.59589601165675},"placeId":"ChIJl63k-vblNDERPb8Wrq8CuIs"},
+          {"title":"Phòng tiêm chủng Vắc xin Family Phúc Yên","address1":"55 Đ. Trần Phú","address2":"Phường Trưng Nhị, Phúc Yên, Vĩnh Phúc 15100, Vietnam","coords":{"lat":21.24643113296651,"lng":105.71097097055224},"placeId":"ChIJGYThc6P9NDERRfcmYzMYTCQ"},
+          {"title":"Phòng tiêm chủng vắc xin dịch vụ An Phúc","address1":"Số nhà 8 khu liền kề","address2":"lô 3 khu đô thị Hoàng Huy Pruska, Máng Nước, An Đông, An Dương, Hải Phòng, Vietnam","coords":{"lat":20.861366476866333,"lng":106.64009922944776},"placeId":"ChIJoajgNh17SjER33ap6TW9I9c"},
+          {"title":"Phòng tiêm chủng Vắc xin Vĩnh Tường","address1":"Đ. Nguyễn Du","address2":"TT. Vĩnh Tường, Vĩnh Tường, Vĩnh Phúc, Vietnam","coords":{"lat":21.215940438073908,"lng":105.51566816441803},"placeId":"ChIJCwh26jz3NDERE98md1JPofs"},
+          {"title":"Trung Trung Tâm Y Tế Vĩnh Tường","address1":"6GC5+WP8","address2":"TT. Vĩnh Tường, Vĩnh Tường, Vĩnh Phúc, Vietnam","coords":{"lat":21.222300025077388,"lng":105.50933363558197},"placeId":"ChIJVVVVVaz2NDERzlDrlWJa5O0"},
+          {"title":"Trung Tâm Y Tế Huyện Tam Dương","address1":"Phố Me","address2":"Thị Trấn Hợp Hoà, Huyện Tam Dương, 9GFQ+53G, TT. Hợp Hoà, Tam Dương, Vĩnh Phúc, Vietnam","coords":{"lat":21.37294675136574,"lng":105.53770014110452},"placeId":"ChIJi4Vx_-buNDERnB8OSnPmhh0"},
+          {"title":"Bệnh viện Sản Nhi Vĩnh Phúc","address1":"Km 9 + 568","address2":"đường tránh, Hợp Thịnh, Tam Dương, Vĩnh Phúc, Vietnam","coords":{"lat":21.281361525519433,"lng":105.54305361165677},"placeId":"ChIJzwo3_Y7xNDEReyNZVO1fuSM"},
+          {"title":"Phòng khám Nhi khoa và tiêm chủng My Anh","address1":"7J2Q+WJG","address2":"Tân Phong, Bình Xuyên District, Vĩnh Phúc, Vietnam","coords":{"lat":21.252203273415887,"lng":105.63867867055228},"placeId":"ChIJb3bqLmP7NDERM-17pD0W77M"},
+          {"title":"Trung Tâm Y Tế Huyện Yên Lạc","address1":"Khu 3","address2":"Thôn Đoài, Thị Trấn Yên Lạc, Huyện Yên Lạc, TT. Yên Lạc, Yên Lạc, Vĩnh Phúc, Vietnam","coords":{"lat":21.230833821869847,"lng":105.5733465938658},"placeId":"ChIJAQAAAKPwNDERrGArrjw38rw"},
+          {"title":"Phòng Khám Đa Khoa Hà Nội - Vĩnh Tường","address1":"Cạnh","address2":"bến xe, TT. Vĩnh Tường, Vĩnh Tường, Vĩnh Phúc, Vietnam","coords":{"lat":21.215643169817525,"lng":105.51506731165676},"placeId":"ChIJg8wPWrD2NDERoUi2zVrSdO0"},
+          {"title":"PHÒNG TIÊM CHỦNG VẮC XIN MAI NGỌC","address1":"ĐT305","address2":"Tam Hồng, Yên Lạc, Vĩnh Phúc 15700, Vietnam","coords":{"lat":21.22920546897871,"lng":105.57277509386574},"placeId":"ChIJXfbylgD3NDERJkGo7Y0K53s"},
+          {"title":"Phòng Tiêm chủng Vắc xin Hoàng Thành Vĩnh Phúc","address1":"Trung Tâm Thương Mại Phúc Sơn","address2":"Thượng Trưng, Vĩnh Tường, Vĩnh Phúc, Vietnam","coords":{"lat":21.240367737544144,"lng":105.49178586441806},"placeId":"ChIJkcbJyB_zNDER5XTtgIwqk5c"},
+          {"title":"Tam Duong district hospital","address1":"9GFQ+48C","address2":"ĐT309, TT. Hợp Hoà, Tam Dương, Vĩnh Phúc, Vietnam","coords":{"lat":21.37282306334366,"lng":105.53827064662705},"placeId":"ChIJu8WUKfvuNDER91-fqOnu2Js"},
+          {"title":"Trung Tâm Kiểm Soát Bệnh Tật","address1":"10 Hai Bà Trưng","address2":"Liên Bảo, Vĩnh Yên, Vĩnh Phúc, Vietnam","coords":{"lat":21.308708128564437,"lng":105.60897239325409},"placeId":"ChIJsaSiKk3lNDERD4MGdD2U7Aw"},
+          {"title":"Vinh Yen Medical Center","address1":"Đường Lê Lợi","address2":"Tích Sơn, Vĩnh Yên, Vĩnh Phúc, Vietnam","coords":{"lat":21.310588598810547,"lng":105.58949929325406},"placeId":"ChIJJ7bo3gHwNDERmGfzJsfbnww"},
+          {"title":"Phòng tiêm vắc xin Bảo Gia","address1":"Hoàng Gia","address2":"Quang Trung, Thành phố Thái Nguyên, Thái Nguyên, Vietnam","coords":{"lat":21.57883514197942,"lng":105.816962264418},"placeId":"ChIJbzMpnnQnNTERQDwAZL_hxRY"},
+          {"title":"Phòng tiêm Vắc Xin Bảo Gia 2 - Cơ Sở Đại Từ","address1":"Đ. Nam Sông Công","address2":"Hùng Sơn, Đại Từ, Thái Nguyên, Vietnam","coords":{"lat":21.635031210434377,"lng":105.64752396441804},"placeId":"ChIJOzhNgLjbNDERksQLtZMXbHM"},
+          {"title":"Phòng tiêm vắc xin Bảo Gia 3 - Cơ sở Phổ yên","address1":"173B Trường Chinh","address2":"Nam Tiến, Phổ Yên, Thái Nguyên, Vietnam","coords":{"lat":21.407595804391512,"lng":105.87282401165677},"placeId":"ChIJ6RYKqosfNTERZgPEzgh-tTU"},
+          {"title":"Trung tâm Kiểm soát bệnh tật tỉnh Thái Nguyên","address1":"số 971 đường Dương Tự Minh Dương Tự Minh","address2":"Hàng Văn Thụ0, Thái Nguyên, Vietnam","coords":{"lat":21.601448622235022,"lng":105.82406173558199},"placeId":"ChIJyXjX-yYnNTERMEnljjrAFbE"},
+          {"title":"Thai Nguyen General Hospital","address1":"479 Lương Ngọc Quyến","address2":"Phan Đình Phùng, Thành phố Thái Nguyên, Thái Nguyên, Vietnam","coords":{"lat":21.58790446495787,"lng":105.83094546441806},"placeId":"ChIJbV_R3N8mNTERYeLbrGhmgMg"},
+          {"title":"Trung Trung Tâm Y Tế Vĩnh Tường","address1":"6GC5+WP8","address2":"TT. Vĩnh Tường, Vĩnh Tường, Vĩnh Phúc, Vietnam","coords":{"lat":21.222296587151654,"lng":105.50935509325409},"placeId":"ChIJVVVVVaz2NDERzlDrlWJa5O0"}
+        ],
+        "mapOptions": {"center":{"lat":38.0,"lng":-100.0},"fullscreenControl":true,"mapTypeControl":false,"streetViewControl":false,"zoom":4,"zoomControl":true,"maxZoom":17,"mapId":""},
+        "mapsApiKey": "AIzaSyAY7b7y_HmxJB-r6sXmlcX9BRp_Fi6jEHI",
+        "capabilities": {"input":true,"autocomplete":true,"directions":true,"distanceMatrix":true,"details":true,"actions":false}
+      };
+
+      function initMap() {
+        new LocatorPlus(CONFIGURATION);
+      }
+    </script>
+    <script id="locator-result-items-tmpl" type="text/x-handlebars-template">
+      {{#each locations}}
+        <li class="location-result" data-location-index="{{index}}">
+          <button class="select-location">
+            <h2 class="name">{{title}}</h2>
+          </button>
+          <div class="address">{{address1}}<br>{{address2}}</div>
+          <div class="options">
+            <div class="option-container">
+              <button class="details-button option">
+                <span>Xem thông tin chi tiết</span>
+              </button>
+            </div>
+          </div>
+          {{#if travelDistanceText}}
+            <div class="distance">{{travelDistanceText}}</div>
+          {{/if}}
+          <a class="directions-button" href="" target="_blank" title="Get directions to this location on Google Maps">
+            <svg width="34" height="34" viewBox="0 0 34 34"
+                  fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.5867 9.24375L17.9403 8.8902V8.8902L17.5867 9.24375ZM16.4117 9.24375L16.7653 9.59731L16.7675 9.59502L16.4117 9.24375ZM8.91172 16.7437L8.55817 16.3902L8.91172 16.7437ZM8.91172 17.9229L8.55817 18.2765L8.55826 18.2766L8.91172 17.9229ZM16.4117 25.4187H16.9117V25.2116L16.7652 25.0651L16.4117 25.4187ZM16.4117 25.4229H15.9117V25.63L16.0582 25.7765L16.4117 25.4229ZM25.0909 17.9229L25.4444 18.2765L25.4467 18.2742L25.0909 17.9229ZM25.4403 16.3902L17.9403 8.8902L17.2332 9.5973L24.7332 17.0973L25.4403 16.3902ZM17.9403 8.8902C17.4213 8.3712 16.5737 8.3679 16.0559 8.89248L16.7675 9.59502C16.8914 9.4696 17.1022 9.4663 17.2332 9.5973L17.9403 8.8902ZM16.0582 8.8902L8.55817 16.3902L9.26527 17.0973L16.7653 9.5973L16.0582 8.8902ZM8.55817 16.3902C8.0379 16.9105 8.0379 17.7562 8.55817 18.2765L9.26527 17.5694C9.13553 17.4396 9.13553 17.227 9.26527 17.0973L8.55817 16.3902ZM8.55826 18.2766L16.0583 25.7724L16.7652 25.0651L9.26517 17.5693L8.55826 18.2766ZM15.9117 25.4187V25.4229H16.9117V25.4187H15.9117ZM16.0582 25.7765C16.5784 26.2967 17.4242 26.2967 17.9444 25.7765L17.2373 25.0694C17.1076 25.1991 16.895 25.1991 16.7653 25.0694L16.0582 25.7765ZM17.9444 25.7765L25.4444 18.2765L24.7373 17.5694L17.2373 25.0694L17.9444 25.7765ZM25.4467 18.2742C25.9631 17.7512 25.9663 16.9096 25.438 16.3879L24.7354 17.0995C24.8655 17.2279 24.8687 17.4363 24.7351 17.5716L25.4467 18.2742Z" fill="#1967d2"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M19 19.8333V17.75H15.6667V20.25H14V16.9167C14 16.4542 14.3708 16.0833 14.8333 16.0833H19V14L21.9167 16.9167L19 19.8333Z" fill="#1967d2"/>
+              <circle class="directions-button-background" cx="17" cy="17" r="16.5" stroke="#1967d2"/>
+            </svg>
+          </a>
+        </li>
+      {{/each}}
+    </script>
+    <script id="locator-details-tmpl" type="text/x-handlebars-template">
+      <button class="back-button">
+        <img class="icon" src="https://fonts.gstatic.com/s/i/googlematerialicons/arrow_back/v11/24px.svg" alt=""/>
+        Back
+      </button>
+      <header>
+        <div class="banner">
+          <svg width="23" height="32" viewBox="0 0 23 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M22.9976 11.5003C22.9976 13.2137 22.7083 14.9123 21.8025 16.7056C18.6321 22.9832 12.7449 24.3314 12.2758 30.7085C12.2448 31.1294 11.9286 31.4744 11.4973 31.4744C11.0689 31.4744 10.7527 31.1294 10.7218 30.7085C10.2527 24.3314 4.3655 22.9832 1.19504 16.7056C0.289306 14.9123 0 13.2137 0 11.5003C0 5.13275 5.14557 0 11.5003 0C17.852 0 22.9976 5.13275 22.9976 11.5003Z" fill="#4285F4"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" transform="translate(5.5,5.5)" d="M6 8.84091L9.708 11L8.724 6.92961L12 4.19158L7.6856 3.83881L6 0L4.3144 3.83881L0 4.19158L3.276 6.92961L2.292 11L6 8.84091Z" fill="#FBE15C"/>
+          </svg>
+        </div>
+        <h2>{{location.title}}</h2>
+      </header>
+      {{#if location.travelDistanceText}}
+        <div class="distance">{{location.travelDistanceText}} away</div>
+      {{/if}}
+      <div class="address">
+        {{location.address1}}<br>
+        {{location.address2}}
+      </div>
+      <div class="atmosphere">
+        {{#if place.rating}}
+          <span class="star-rating-numeric">{{place.rating}}</span>
+          <span>
+            {{#each place.fullStarIcons}}
+              <img src="https://fonts.gstatic.com/s/i/googlematerialicons/star/v15/24px.svg"
+                   alt="" class="star-icon"/>
+            {{/each}}
+            {{#each place.halfStarIcons}}
+              <img src="https://fonts.gstatic.com/s/i/googlematerialicons/star_half/v17/24px.svg"
+                   alt="" class="star-icon"/>
+            {{/each}}
+            {{#each place.emptyStarIcons}}
+              <img src="https://fonts.gstatic.com/s/i/googlematerialicons/star_outline/v9/24px.svg"
+                   alt="" class="star-icon"/>
+            {{/each}}
+          </span>
+        {{/if}}
+        {{#if place.user_ratings_total}}
+          <a href="{{place.url}}" target="_blank">{{place.user_ratings_total}} reviews</a>
+        {{else}}
+          <a href="{{place.url}}" target="_blank">See on Google Maps</a>
+        {{/if}}
+        {{#if place.price_level}}
+          &bull;
+          <span class="price-dollars">
+            {{#each place.dollarSigns}}${{/each}}
+          </span>
+        {{/if}}
+      </div>
+      <hr/>
+      {{#if place.opening_hours}}
+        <div class="hours contact">
+          <img src="https://fonts.gstatic.com/s/i/googlematerialicons/schedule/v12/24px.svg"
+               alt="Opening hours" class="icon"/>
+          <div class="right">
+            {{#each place.openingHoursSummary}}
+              <div>
+                <span class="weekday">{{days}}</span>
+                <span class="hours">{{hours}}</span>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
+      {{#if place.website}}
+        <div class="website contact">
+          <img src="https://fonts.gstatic.com/s/i/googlematerialicons/public/v10/24px.svg"
+               alt="Website" class="icon"/>
+          <div class="right">
+            <a href="{{place.website}}" target="_blank">{{place.websiteDomain}}</a>
+          </div>
+        </div>
+      {{/if}}
+      {{#if place.formatted_phone_number}}
+        <div class="phone contact">
+          <img src="https://fonts.gstatic.com/s/i/googlematerialicons/phone/v10/24px.svg"
+               alt="Phone number" class="icon"/>
+          <div class="right">
+            {{place.formatted_phone_number}}
+          </div>
+        </div>
+      {{/if}}
+      {{#if place.html_attributions}}
+        {{#each place.html_attributions}}
+          <p class="attribution">{{{this}}}</p>
+        {{/each}}
+      {{/if}}
+    </script>
+  </head>
+  <body>
+    <div id="map-container">
+      <div id="locations-panel">
+        <div id="locations-panel-list">
+          <header>
+            <h1 class="search-title">
+              <img src="https://fonts.gstatic.com/s/i/googlematerialicons/place/v15/24px.svg"/>
+              Tìm điểm tiêm ngừa gần bạn
+            </h1>
+            <div class="search-input">
+              <input id="location-search-input" placeholder="Nhập địa chỉ của bạn">
+              <div id="search-overlay-search" class="search-input-overlay search">
+                <button id="location-search-button">
+                  <img class="icon" src="https://fonts.gstatic.com/s/i/googlematerialicons/search/v11/24px.svg" alt="Search"/>
+                </button>
+              </div>
+            </div>
+          </header>
+          <div class="section-name" id="location-results-section-name">
+            Địa điểm
+          </div>
+          <div class="results">
+            <ul id="location-results-list"></ul>
+          </div>
+        </div>
+        <div id="locations-panel-details"></div>
+      </div>
+      <div id="gmp-map"></div>
+    </div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChMlmg0REtK4g5ZcPZVpxvrOkloooU97Q&callback=initMap&libraries=places,geometry&solution_channel=GMP_QB_locatorplus_v6_cABCDE" async defer></script>
+  </body>
+</html>
